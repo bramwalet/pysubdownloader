@@ -4,12 +4,12 @@ Created on 18 mei 2009
 @author: Bram Walet
 '''
 import os
-from lib.Parser import Parser
+from lib.FilenameParser import FilenameParser
 
 class Inspector(object):
     
     def __init__(self):
-        self.parser = Parser()
+        self.parser = FilenameParser()
         
     def scan(self,path):
         return self.findEpisodes(path)
