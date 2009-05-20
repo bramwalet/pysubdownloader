@@ -9,7 +9,7 @@ from classes.Subtitle import Subtitle
 from classes.ConfigException import ConfigException
 from handlers.FileHandler import FileHandler
 from handlers.UrlHandler import UrlHandler
-from handlers.QueryHandler import QueryHandler
+
 
 class AbstractHtmlSite(AbstractSubtitleSite):
     '''
@@ -30,8 +30,9 @@ class AbstractHtmlSite(AbstractSubtitleSite):
     def createSearchQuery(self,episode): 
         (searchKeys,sep) = self.getKeys(episode)
         searchUrl = self.config["searchUrl"]
-        searchQueryUrl = self.qh.createSearchQuery(episode,searchUrl, searchKeys, sep)
+        searchQueryUrl = searchUrl + sep.join(searchKeys)
         return searchQueryUrl
+
     
     def search(self, episodes):
         print "Search for each episode on: " + self.config["siteName"]
