@@ -3,7 +3,8 @@ Created on 18 mei 2009
 
 @author: Bram Walet
 '''
-import os.path
+import os.path, logging
+from lib.LoggerFactory import LoggerFactory
 
 class Episode(object):
     '''
@@ -20,13 +21,80 @@ class Episode(object):
         self.episode = episode
         self.path = path
         self.fileName = fileName
+        lf = LoggerFactory("Episode")
+        self.log = lf.getLogger()
 
     def getSerie(self):
-        return self.serie
+        return self.__serie
+
+
+    def getYear(self):
+        return self.__year
 
 
     def getSeason(self):
-        return self.season
+        return self.__season
+
+
+    def getEpisode(self):
+        return self.__episode
+
+
+    def getPath(self):
+        return self.__path
+
+
+    def getFileName(self):
+        return self.__fileName
+
+
+    def setSerie(self, value):
+        self.__serie = value
+
+
+    def setYear(self, value):
+        self.__year = value
+
+
+    def setSeason(self, value):
+        self.__season = value
+
+
+    def setEpisode(self, value):
+        self.__episode = value
+
+
+    def setPath(self, value):
+        self.__path = value
+
+
+    def setFileName(self, value):
+        self.__fileName = value
+
+
+    def delSerie(self):
+        del self.__serie
+
+
+    def delYear(self):
+        del self.__year
+
+
+    def delSeason(self):
+        del self.__season
+
+
+    def delEpisode(self):
+        del self.__episode
+
+
+    def delPath(self):
+        del self.__path
+
+
+    def delFileName(self):
+        del self.__fileName
+
 
 
     def getEpisode(self):
@@ -35,25 +103,9 @@ class Episode(object):
         else:
             episodes = self.episode.split('-')
             return episodes[0]
-
-
-    def getPath(self):
-        return self.path
-
-
-    def getFileName(self):
-        return self.fileName
-    
-    def getYear(self):
-        return self.year
-
-                
-    def __iter__(self):
-        return self;
-    
         
     def printEpisode(self):
-        return "Serie: " + self.serie + " Season: " + self.season + " Episode: " + self.episode
+        return "serie: " + self.serie + " Season: " + self.season + " Episode: " + self.episode
         
     def appropriateSub(self,sub):
   
@@ -64,7 +116,7 @@ class Episode(object):
         if self.episode != sub.getEpisode():
             return False   
         if sub.isDoubleEpisode():
-            print "Double episodes not supported"
+            self.log.error("Double episodes not supported")
             return False         
         
         return True
@@ -76,5 +128,18 @@ class Episode(object):
     def isDoubleEpisode(self):
         # TODO: Implement
         return True
-    
-   
+
+    _serie = property(getSerie, setSerie, delSerie, "Serie's Docstring")
+
+    _year = property(getYear, setYear, delYear, "Year's Docstring")
+
+    _season = property(getSeason, setSeason, delSeason, "Season's Docstring")
+
+    _episode = property(getEpisode, setEpisode, delEpisode, "Episode's Docstring")
+
+    _path = property(getPath, setPath, delPath, "Path's Docstring")
+
+    _fileName = property(getFileName, setFileName, delFileName, "FileName's Docstring")
+
+
+  
