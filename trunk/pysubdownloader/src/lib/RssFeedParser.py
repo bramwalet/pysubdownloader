@@ -5,8 +5,9 @@ Created on 18 mei 2009
 '''
 
 import feedparser, re
-from lib.FilenameParser import FilenameParser
+
 from classes.Subtitle import Subtitle
+from lib.FilenameParser import FilenameParser
 
 class RssFeedParser(object):
     '''

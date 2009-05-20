@@ -4,8 +4,7 @@ Created on 18 mei 2009
 @author: Bram Walet
 '''
 import urllib2
-
-            
+      
 class UrlHandler(object):
     
     def __init__(self):
