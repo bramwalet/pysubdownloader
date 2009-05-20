@@ -36,14 +36,14 @@ class AbstractHtmlSite(AbstractSubtitleSite):
 
     
     def search(self, episodes):
-        print "Search for each episode on: " + self.config["siteName"]
+        self.log.debug("Search for each episode.")
         
         for episode in episodes:
-            print "Search " + self.config["siteName"] + " for: " + episode.printEpisode()
+            self.log.debug("Search for " + episode.printEpisode())
             searchUrl = self.createSearchQuery(episode)
             sub = self.searchEpisode(episode,searchUrl)
             if sub != None:
-                print "Match found for episode: " + episode.printEpisode + " on site " + self.siteName
+                self.log.debug("Match found for episode: " + episode.printEpisode + " on site " + self.siteName)
                 self.downloadSubtitle(sub,episode,self.siteName)
                 
     def searchEpisode(self,episode,searchUrl):

@@ -21,14 +21,14 @@ class PodnapisiSite(AbstractHtmlSite):
     def getKeys(self,episode):
         searchKeys = ['tbsl=3',
                 'asdp=1', 
-                'sK='+ episode.getSerie(),
+                'sK='+ episode.serie,
                 'sJ=' + '2', 
                 'sO=desc',
                 'sS=time',
                 'submit=Search', 
-                'sTS=' + episode.getSeason(),
-                'sTE=' + str(episode.getEpisode()),
-                'sY=' + episode.getYear(), 
+                'sTS=' + episode.season,
+                'sTE=' + str(episode.episode),
+                'sY=' + episode.year, 
                 'sR', 
                 'sT=1']
         sep = '&'
