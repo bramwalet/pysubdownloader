@@ -3,12 +3,14 @@ Created on 20 mei 2009
 
 @author: Bram Walet
 '''
-from sites.AbstractSubtitleSite import AbstractSubtitleSite
+
 from lxml.html import fromstring
+
 from classes.Subtitle import Subtitle
 from classes.ConfigException import ConfigException
 from handlers.FileHandler import FileHandler
 from handlers.UrlHandler import UrlHandler
+from sites.AbstractSubtitleSite import AbstractSubtitleSite
 
 
 class AbstractHtmlSite(AbstractSubtitleSite):
@@ -20,7 +22,6 @@ class AbstractHtmlSite(AbstractSubtitleSite):
     def setUpHandlers(self):
         self.fh = FileHandler()
         self.uh = UrlHandler()
-        self.qh = QueryHandler()
     
     def checkConfig(self):
         requiredKeys = ('siteName','findTableString','findDownloadLink','baseUrl','searchUrl')

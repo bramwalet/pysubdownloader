@@ -4,14 +4,12 @@ Created on 20 mei 2009
 @author: Bram Walet
 '''
 
-from sites.AbstractSubtitleSite import AbstractSubtitleSite
-
+from classes.ConfigException import ConfigException
 from handlers.FileHandler import FileHandler
 from handlers.UrlHandler import UrlHandler
 from lib.FilenameParser import FilenameParser
 from lib.RssFeedParser import RssFeedParser
-
-from classes.ConfigException import ConfigException
+from sites.AbstractSubtitleSite import AbstractSubtitleSite
 
 class AbstractRssSite(AbstractSubtitleSite):
     '''

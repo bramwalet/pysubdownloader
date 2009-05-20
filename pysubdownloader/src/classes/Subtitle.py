@@ -4,7 +4,6 @@ Created on 18 mei 2009
 @author: Bram Walet
 '''
 import re
-from classes.Episode import Episode
 
 class Subtitle(object):
     

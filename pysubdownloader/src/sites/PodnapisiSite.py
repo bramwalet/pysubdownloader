@@ -5,10 +5,6 @@ Created on 18 mei 2009
 '''
 from sites.AbstractHtmlSite import AbstractHtmlSite
 
-
-
-
-
 class PodnapisiSite(AbstractHtmlSite):
     '''
     classdocs
