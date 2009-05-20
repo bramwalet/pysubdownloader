@@ -41,5 +41,5 @@ class AbstractSubtitleSite(object):
         filein = self.uh.executeRequest(downloadurl)
         archive = self.fh.openZipFile(filein) 
         if self.fh.extractZipFile(episode, archive):
-            self.log.debug("Extracted subtitle from site: " + site)
+            self.log.debug("Extracted subtitle")
         
