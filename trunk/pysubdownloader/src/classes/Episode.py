@@ -30,7 +30,11 @@ class Episode(object):
 
 
     def getEpisode(self):
-        return int(self.episode)
+        if not self.isDoubleEpisode:
+            return int(self.episode)
+        else:
+            episodes = self.episode.split('-')
+            return episodes[0]
 
 
     def getPath(self):
@@ -49,7 +53,7 @@ class Episode(object):
     
         
     def printEpisode(self):
-        print "Serie: " + self.serie + " Season: " + self.season + " Episode: " + self.episode
+        return "Serie: " + self.serie + " Season: " + self.season + " Episode: " + self.episode
         
     def appropriateSub(self,sub):
   
@@ -60,7 +64,7 @@ class Episode(object):
         if self.episode != sub.getEpisode():
             return False   
         if sub.isDoubleEpisode():
-            print "double episodes not supported"
+            print "Double episodes not supported"
             return False         
         
         return True
