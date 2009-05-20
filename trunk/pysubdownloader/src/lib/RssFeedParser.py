@@ -14,11 +14,12 @@ class RssFeedParser(object):
     '''
 
 
-    def __init__(self,url):
+    def __init__(self,url,baseUrl):
         '''
         Constructor
         '''
         self.url = url
+        self.baseUrl = baseUrl
         self.parser = FilenameParser()
         
         
@@ -54,6 +55,13 @@ class RssFeedParser(object):
                     serietitle = serietitle + " " + word
 
         (episode, season) = self.parser.parseEpisodeString(seasonEpisodeString)
+        link = self.baseUrl + "download-" + self.getId(link) + ".html"
         sub = Subtitle(serietitle, season, episode, link)
         return sub
    
+    def getId(self,displayLink):
+        # TODO: this should be in a parser, and should be fixed better
+        rightIdx = displayLink.rfind('.')
+        leftIdx = displayLink.find('-')
+        id = displayLink[leftIdx+1:rightIdx]
+        return id
