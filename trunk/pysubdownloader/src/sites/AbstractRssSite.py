@@ -16,13 +16,7 @@ class AbstractRssSite(AbstractSubtitleSite):
     classdocs
     '''
 
-
-    def __init__(self):
-        '''
-        Constructor
-        '''
-        super(AbstractRssSite,self).__init__()
-       
+    
     def setUpHandlers(self):
         self.fh = FileHandler()
         self.uh = UrlHandler()
@@ -35,13 +29,13 @@ class AbstractRssSite(AbstractSubtitleSite):
     
         
     def search(self,episodes):
-         print "Search for episodes on: " + self.config["siteName"]
+         self.log.debug("Search for new episodes on RSS feed.")
          
          availableSubs = self.rssparser.parse()
          for aSub in availableSubs: 
             for episode in episodes:
                 if episode.appropriateSub(aSub):
-                    print "Match found for episode: " + episode.printEpisode() + " on site " + self.config["siteName"]
+                    self.log.debug("Match found for episode: " + episode.printEpisode())
                     self.downloadSubtitle(aSub, episode)
                     
                     
@@ -51,5 +45,5 @@ class AbstractRssSite(AbstractSubtitleSite):
         filein = self.uh.executeRequest(downloadurl)
         archive = self.fh.openZipFile(filein) 
         if self.fh.extractZipFile(episode, archive):
-            print "Extracted subtitle for: " + episode.printEpisode() + " on site: " + self.config["siteName"]
+            self.log.debug("Extracted subtitle for: " + episode.printEpisode())
         
