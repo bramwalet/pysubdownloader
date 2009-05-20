@@ -3,7 +3,7 @@ Created on 18 mei 2009
 
 @author: Bram Walet
 '''
-import os.path
+import os.path,re
 from classes.Episode import Episode
 
 class FilenameParser(object):
@@ -16,11 +16,20 @@ class FilenameParser(object):
         (dirName, fileName) = os.path.split(path)
         (fileBaseName, fileExtension) = os.path.splitext(fileName)
         list = fileBaseName.split(" - ")
-        serie = list[0]
+        serieName = str(list[0])
+        pattern = '\([0-9]{4}\)'
+        if re.search(pattern,serieName):
+            print "this serie has a year"
+            years = re.findall(pattern, serieName)
+            year = years[0]
+            serieName = serieName.replace(year, "")
+            serieName =  serieName.strip()
+        else:
+            year = "" 
         #print fileBaseName
         seasonEpisodeString = list[1]
         (episode, season) = self.parseEpisodeString(seasonEpisodeString)
-        e = Episode(serie, season, episode, dirName, fileName)
+        e = Episode(serieName, year, season, episode, dirName, fileName)
         return e
     
     def parseEpisodeString(self,seasonEpisodeString):

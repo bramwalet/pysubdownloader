@@ -10,15 +10,39 @@ class Episode(object):
     classdocs
     '''
 
-    def __init__(self, serie, season, episode, path, fileName):
+    def __init__(self, serie, year, season, episode, path, fileName):
         '''
         Constructor
         '''
         self.serie = serie
+        self.year = year
         self.season = season
         self.episode = episode
         self.path = path
         self.fileName = fileName
+
+    def getSerie(self):
+        return self.serie
+
+
+    def getSeason(self):
+        return self.season
+
+
+    def getEpisode(self):
+        return int(self.episode)
+
+
+    def getPath(self):
+        return self.path
+
+
+    def getFileName(self):
+        return self.fileName
+    
+    def getYear(self):
+        return self.year
+
                 
     def __iter__(self):
         return self;
@@ -49,4 +73,4 @@ class Episode(object):
         # TODO: Implement
         return True
     
-  
+   
