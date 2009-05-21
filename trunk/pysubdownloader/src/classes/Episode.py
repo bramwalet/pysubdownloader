@@ -18,7 +18,8 @@ class Episode(object):
         self.serie = serie
         self.year = year
         self.season = season
-        self.episode = episode
+        episodes = episode.split('-')
+        self.episode =  int(episodes[0])
         self.path = path
         self.fileName = fileName
         lf = LoggerFactory("Episode")
@@ -98,14 +99,10 @@ class Episode(object):
 
 
     def getEpisode(self):
-        if not self.isDoubleEpisode:
-            return int(self.episode)
-        else:
-            episodes = self.episode.split('-')
-            return episodes[0]
+        return self.__episode
         
     def printEpisode(self):
-        return "serie: " + self.serie + " Season: " + self.season + " Episode: " + self.episode
+        return "serie: " + self.serie + " Season: " + self.season + " Episode: " + str(self.episode)
         
     def appropriateSub(self,sub):
   
