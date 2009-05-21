@@ -11,13 +11,14 @@ class TvSubtitleSite(AbstractRssSite):
     '''
    
     def setUp(self):
+         supportedLanguages = ("en", "es", "fr", "de", "br", "ru", "ua", "it", "gr", "ar","hu", "pl","tr")
          config =  { "siteName" : "TvSubtitles",
-                     "rssFeed"  : "http://www.tvsubtitles.net/rssen.xml",
+                     "rssFeed"  : "http://www.tvsubtitles.net/rss#lang#.xml",
                      "baseUrl"  : "http://www.tvsubtitles.net/" }
          
-         return config
- 
-
+         return (config,supportedLanguages)
+    
+  
         
     
     

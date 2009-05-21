@@ -11,18 +11,20 @@ class PodnapisiSite(AbstractHtmlSite):
     '''
         
     def setUp(self):
+        supportedLanguages = ("en", "es", "fr", "de", "br", "ru", "ua", "it", "gr", "ar","hu", "pl","tr")
         config = { "siteName" : "Podnapisi",
                    "findTableString" : 'a',
                    "findDownloadLink" : 'download',
                    "baseUrl" : "http://simple.podnapisi.net/ppodnapisi/",
                    "searchUrl" : "http://simple.podnapisi.net/ppodnapisi/search?" }
-        return config
+        return (config,supportedLanguages)
     
     def getKeys(self,episode):
+        languageKeys = {"en":"2","es":"28","fr":"8","nl":"23","de":"5"}
         searchKeys = ['tbsl=3',
                 'asdp=1', 
                 'sK='+ episode.serie,
-                'sJ=' + '2', 
+                'sJ=' + languageKeys[self.language], 
                 'sO=desc',
                 'sS=time',
                 'submit=Search', 
@@ -33,8 +35,8 @@ class PodnapisiSite(AbstractHtmlSite):
                 'sT=1']
         sep = '&'
         return (searchKeys,sep)
-       
     
+      
       
 
 

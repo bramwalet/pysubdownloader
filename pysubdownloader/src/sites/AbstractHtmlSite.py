@@ -5,6 +5,7 @@ Created on 20 mei 2009
 '''
 
 from lxml.html import fromstring
+import re
 
 from classes.Subtitle import Subtitle
 from classes.ConfigException import ConfigException
@@ -23,15 +24,15 @@ class AbstractHtmlSite(AbstractSubtitleSite):
         self.fh = FileHandler()
         self.uh = UrlHandler()
     
-    def checkConfig(self):
+    def checkConfig(self,config):
         requiredKeys = ('siteName','findTableString','findDownloadLink','baseUrl','searchUrl')
-        super(AbstractHtmlSite,self).checkConfig(requiredKeys)
-    
+        super(AbstractHtmlSite,self).checkConfig(config,requiredKeys)
         
     def createSearchQuery(self,episode): 
         (searchKeys,sep) = self.getKeys(episode)
         searchUrl = self.config["searchUrl"]
         searchQueryUrl = searchUrl + sep.join(searchKeys)
+        self.log.debug("Search URL: " + searchQueryUrl)
         return searchQueryUrl
 
     
@@ -43,8 +44,8 @@ class AbstractHtmlSite(AbstractSubtitleSite):
             searchUrl = self.createSearchQuery(episode)
             sub = self.searchEpisode(episode,searchUrl)
             if sub != None:
-                self.log.debug("Match found for episode: " + episode.printEpisode + " on site " + self.siteName)
-                self.downloadSubtitle(sub,episode,self.siteName)
+                self.log.debug("Match found for episode: " + episode.printEpisode())
+                self.downloadSubtitle(sub,episode)
                 
     def searchEpisode(self,episode,searchUrl):
         self.uh.installUrlHandler()
@@ -55,5 +56,8 @@ class AbstractHtmlSite(AbstractSubtitleSite):
         for listitem in list:
             for (element, attribute, link, pos) in listitem.iterlinks():
                 if re.search(self.config["findDownloadLink"],link):
-                    return Subtitle(episode.getSerie(), episode.getSeason(), episode.getEpisode(), link)
-                    
+                    return Subtitle(episode.serie, episode.season, episode.episode, link)
+    
+#    def getLanguage(self,language,languageKeys):
+#        return languageKeys[language]
+#                      

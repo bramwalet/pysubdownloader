@@ -21,11 +21,12 @@ class AbstractRssSite(AbstractSubtitleSite):
         self.fh = FileHandler()
         self.uh = UrlHandler()
         self.fparser = FilenameParser()
-        self.rssparser = RssFeedParser(self.config["rssFeed"], self.config["baseUrl"])
+        rssFeedUrl = self.getRssFeedUrl(self.language)
+        self.rssparser = RssFeedParser(rssFeedUrl, self.config["baseUrl"])
 
-    def checkConfig(self):
+    def checkConfig(self,config):
         requiredKeys = ('siteName','baseUrl','rssFeed')
-        super(AbstractRssSite,self).checkConfig(requiredKeys)
+        super(AbstractRssSite,self).checkConfig(config,requiredKeys)
     
         
     def search(self,episodes):
@@ -46,4 +47,8 @@ class AbstractRssSite(AbstractSubtitleSite):
         archive = self.fh.openZipFile(filein) 
         if self.fh.extractZipFile(episode, archive):
             self.log.debug("Extracted subtitle for: " + episode.printEpisode())
-        
+    
+    def getRssFeedUrl(language):
+         rssFeedUrl = config["rssFeed"]
+         rssFeedUrl.replace("#lang#",language)
+         return rssFeedUrl     
