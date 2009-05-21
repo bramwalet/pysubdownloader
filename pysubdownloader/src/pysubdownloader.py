@@ -9,6 +9,7 @@ from optparse import OptionParser
 from lib.Inspector import Inspector
 from sites.TvSubtitleSite import TvSubtitleSite
 from sites.PodnapisiSite import PodnapisiSite
+from sites.TvSubsSite import TvSubsSite
 
     
 def parseOptions():
@@ -48,6 +49,13 @@ def startSubtitleDownloader(path,language):
         podnapisi.search(episodes)
     except (RuntimeError, ), e:
         raise
+
+#    try:
+#        
+#        tvsubs = TvSubsSite(language)
+#        tvsubs.search(episodes)
+#    except (RuntimeError, ), e:
+#        raise
 
 
     
