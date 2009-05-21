@@ -12,7 +12,7 @@ This script is designed to work on every OS. I have tested it so far on Windows,
  # Fist of all, you need Python 2.5, which you can download on the [http://python.org/download/releases/2.5.4/ Python official site] or install using your package manager.
  # When Python is installed, you have to install some required libraries:
 
-  * libxml2 and libxslt are required prior to install lxml.
+  * [http://xmlsoft.org/downloads.html libxml2] and [http://xmlsoft.org/XSLT/downloads.html libxslt] are required for lxml (see installation instructions below).
   * [http://codespeak.net/lxml/installation.html lxml] is required to parse HTML documents
    Install [http://peak.telecommunity.com/DevCenter/EasyInstall EasyInstall] and run easy_install lxml.  
   * [http://www.feedparser.org/ Universal Feed Parser] is required to parse RSS feeds.
