@@ -48,7 +48,7 @@ class AbstractRssSite(AbstractSubtitleSite):
         if self.fh.extractZipFile(episode, archive):
             self.log.debug("Extracted subtitle for: " + episode.printEpisode())
     
-    def getRssFeedUrl(language):
-         rssFeedUrl = config["rssFeed"]
+    def getRssFeedUrl(self,language):
+         rssFeedUrl = self.config["rssFeed"]
          rssFeedUrl.replace("#lang#",language)
          return rssFeedUrl     

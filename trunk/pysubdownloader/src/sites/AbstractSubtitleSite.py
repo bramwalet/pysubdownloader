@@ -45,11 +45,15 @@ class AbstractSubtitleSite(object):
     def checkLanguage(self,supportedLanguages,inputLanguage):
         if supportedLanguages is None:
             raise ConfigException("This site must support at least one language. Please return a list of supportedLanguages in method setUp()")
-        try:
-            for language in supportedLanguages:
-                supportedLanguages[language]
-        except (KeyError, ), e:
-                raise ConfigException("This site does not support this language.")
+        languageFound = False
+        for language in supportedLanguages:
+            if language == inputLanguage:
+               languageFound = True
+                    
+        if languageFound == False:
+            raise ConfigException("This site does not support this language.")
+       
+                
      
        
     def downloadSubtitle(self,sub,episode):
