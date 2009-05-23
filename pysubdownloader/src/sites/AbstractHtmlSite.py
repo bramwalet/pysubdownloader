@@ -6,8 +6,7 @@ Created on 20 mei 2009
 
 from lxml.html import fromstring
 from lxml import html
-
-import re
+import urllib, re
 
 from classes.Subtitle import Subtitle
 from classes.ConfigException import ConfigException
@@ -31,9 +30,9 @@ class AbstractHtmlSite(AbstractSubtitleSite):
         super(AbstractHtmlSite,self).checkConfig(config,requiredKeys)
         
     def createSearchQuery(self,episode): 
-        (searchKeys,sep) = self.getKeys(episode)
+        searchKeys = self.getKeys(episode)
         searchUrl = self.config["searchUrl"]
-        searchQueryUrl = searchUrl + sep.join(searchKeys)
+        searchQueryUrl = searchUrl + urllib.urlencode(searchKeys)
         self.log.debug("Search URL: " + searchQueryUrl)
         return searchQueryUrl
 
@@ -61,7 +60,7 @@ class AbstractHtmlSite(AbstractSubtitleSite):
         for listitem in list:
        #     self.log.debug(listitem.text_content())
             for (element, attribute, link, pos) in listitem.iterlinks():
-                self.log.debug("Evaluate URL: + " + str(link) + " in element " + str(element))
+                #self.log.debug("Evaluate URL: + " + str(link) + " in element " + str(element))
                 if re.search(self.config["findDownloadLink"],link):
                     self.log.debug("Download URL found: + "+link)
                     return Subtitle(episode.serie, episode.season, episode.episode, link)
