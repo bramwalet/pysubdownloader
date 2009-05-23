@@ -18,11 +18,11 @@ class AbstractRssSite(AbstractSubtitleSite):
 
     
     def setUpHandlers(self):
-        self.fh = FileHandler()
-        self.uh = UrlHandler()
-        self.fparser = FilenameParser()
+        self.fh = FileHandler(self.logfile)
+        self.uh = UrlHandler(self.logfile)
+        self.fparser = FilenameParser(self.logfile)
         rssFeedUrl = self.getRssFeedUrl(self.language)
-        self.rssparser = RssFeedParser(rssFeedUrl, self.config["baseUrl"])
+        self.rssparser = RssFeedParser(rssFeedUrl, self.config["baseUrl"],self.logfile)
 
     def checkConfig(self,config):
         requiredKeys = ('siteName','baseUrl','rssFeed')
@@ -30,23 +30,22 @@ class AbstractRssSite(AbstractSubtitleSite):
     
         
     def search(self,episodes):
-         self.log.debug("Search for new episodes on RSS feed.")
+         self.log.info("Search for new episodes on RSS feed.")
          
          availableSubs = self.rssparser.parse()
          for aSub in availableSubs: 
             for episode in episodes:
                 if episode.appropriateSub(aSub):
-                    self.log.debug("Match found for episode: " + episode.printEpisode())
+                    self.log.info("Match found for episode: " + episode.printEpisode())
                     self.downloadSubtitle(aSub, episode)
                     
                     
-    def downloadSubtitle(self,sub,episode):
-        downloadurl = sub.getLink()
-        self.uh.installUrlHandler()
-        filein = self.uh.executeRequest(downloadurl)
-        archive = self.fh.openZipFile(filein) 
-        if self.fh.extractZipFile(episode, archive):
-            self.log.debug("Extracted subtitle for: " + episode.printEpisode())
+#    def downloadSubtitle(self,sub,episode):
+#        downloadurl = sub.getLink()
+#        filein = self.uh.executeRequest(downloadurl)
+#        archive = self.fh.openZipFile(filein) 
+#        if self.fh.extractZipFile(episode, archive):
+#            self.log.info("Extracted subtitle for: " + episode.printEpisode())
     
     def getRssFeedUrl(self,language):
          rssFeedUrl = self.config["rssFeed"]

@@ -5,6 +5,7 @@ Created on 18 mei 2009
 '''
 from sites.AbstractHtmlSite import AbstractHtmlSite
 
+
 class PodnapisiSite(AbstractHtmlSite):
     '''
     classdocs
@@ -13,7 +14,7 @@ class PodnapisiSite(AbstractHtmlSite):
     def setUp(self):
         supportedLanguages = ("en", "es", "fr", "de", "br", "ru", "ua", "it", "gr", "ar","hu", "pl","tr")
         config = { "siteName" : "Podnapisi",
-                   "findTableString" : 'a',
+                   "findTableString" : 'list',
                    "findDownloadLink" : 'download',
                    "baseUrl" : "http://simple.podnapisi.net/ppodnapisi/",
                    "searchUrl" : "http://simple.podnapisi.net/ppodnapisi/search?" }
@@ -22,7 +23,7 @@ class PodnapisiSite(AbstractHtmlSite):
     def getKeys(self,episode):
         languageKeys = {"en":"2","es":"28","fr":"8","nl":"23","de":"5"}
         searchKeys = ['tbsl=3',
-                'asdp=1', 
+                'asdp=0', 
                 'sK='+ episode.serie,
                 'sJ=' + languageKeys[self.language], 
                 'sO=desc',
