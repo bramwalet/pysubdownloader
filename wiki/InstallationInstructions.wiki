@@ -5,7 +5,7 @@
 On this page, I'll explain how to setup your Python libraries in order to use this script. 
 
 
-= Installation =
+= Requirements =
 
 This script is designed to work on every OS. I have tested it so far on Windows, but I'm planning on using it on my Synology DS207+ NAS with optware installed. So this script should work on every platform that has a Python interpreter and all required libraries.
  
@@ -14,5 +14,33 @@ This script is designed to work on every OS. I have tested it so far on Windows,
 
   * [http://xmlsoft.org/downloads.html libxml2] and [http://xmlsoft.org/XSLT/downloads.html libxslt] are required for lxml (see installation instructions below).
   * [http://codespeak.net/lxml/installation.html lxml] is required to parse HTML documents
-   Install [http://peak.telecommunity.com/DevCenter/EasyInstall EasyInstall] and run easy_install lxml.  
+   Install setuptools and run {{{easy_install lxml}}}.  
   * [http://www.feedparser.org/ Universal Feed Parser] is required to parse RSS feeds.
+
+= Installation =
+
+== Linux ==
+Use your favorite package manager to install: libxml2, libxslt, python2.5.
+Make sure you have gcc installed.
+
+I have tested these instructions on my DiskStation NAS with optware installed. I use the following package feed:
+
+Install these packages in the following order: 
+ # python2.5: Self-explanatory
+ # py25-setuptools: This will install easy_install, required for installing lxml
+ # libxml2, libxsl: These packages are required for lxml
+ # py25-lxml: Bindings for libxml2 and libxslt with python2.5. If you don't install this package, lxml will not build.
+ # easy_install lxml: This will install lxml, required for processing HTML pages.
+ # py25-feedparser: This will install the universal feed parser for processing RSS feeds.
+
+When you're done, you're ready to use pysubdownloader.
+
+== Windows ==
+Install the binary versions in this order: 
+ # python2.5, see python.org
+ # [http://xmlsoft.org/sources/win32/python/libxml2-python-2.7.3.win32-py2.5.exe libxml2],
+ # [http://pypi.python.org/packages/2.5/s/setuptools/setuptools-0.6c9.win32-py2.5.exe#md5=602d06054ec1165e995ae54ac30884d7 setuptools],
+ # lxml (run {{{easy_install lxml}}} from the Scripts folder in your Python installation dir), 
+ # use {{{easy_install feedparser}}} or download source of Universal Feed Parser and run {{{setup.py install}}}
+
+When you're done, you're ready to use pysubdownloader.
