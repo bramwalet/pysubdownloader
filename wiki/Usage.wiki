@@ -1,0 +1,46 @@
+#summary This page describes how pysubdownloader should be used, its features and limitations.
+
+= Introduction =
+
+This page describes how to use pysubdownloader.
+
+= Running pysubdownloader =
+ 
+When you've installed python you can run pysubdownloader by using the following command:
+{{{[python executable] pysubdownloader [options]}}}
+
+= Command line arguments =
+
+When you run {{{[python executable] pysubdownloader -h}}} the following help text will appear:
+
+{{{
+Usage: pysubdownloader.py [options]
+
+Options:
+  -h, --help   show this help message and exit
+  -f FOLDER    scan this folder and subfolders
+  -l LANGUAGE  language to search subtitles for
+}}}
+
+this should be self explanatory but if the help text does not help you any further:
+
+option: -f 
+this specifies the folder in which the tv series are located. This folder is scanned (recursive) to find movie files. Pysubdownloader currently finds movie files by looking at the extention of the file: .wmv, .mkv and .avi are considered movie files. 
+
+option: -l
+this specifies the language in which the subtitles should be searched for. The language is specified according to the [http://www.iso.org/iso/english_country_names_and_code_elements ISO 3166] list. 
+This is a required option. To use english use {{{-l en}}}.
+
+= Results =
+
+Pysubdownloader will log every attempt to search for a TV show on a specific site:
+
+_date_ _time_ - Podnapisi - DEBUG - Search for serie: _Mythbusters_ Season: _7_ Episode: _2_
+
+This logging will be optional with a command line argument in the future.
+
+When a subtitle is found, it is downloaded, extracted (mostly zip files) and then placed in the same folder as the movie file is located, with the same name as the movie file, but with the .srt extention. Use your favorite movie player to display these subtitles.
+
+= Automating your search =
+
+Use crontab or a scheduled task in Windows to automate the search of new subtitles. 
