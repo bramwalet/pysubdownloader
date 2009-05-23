@@ -32,7 +32,7 @@ class AbstractHtmlSite(AbstractSubtitleSite):
         (searchKeys,sep) = self.getKeys(episode)
         searchUrl = self.config["searchUrl"]
         searchQueryUrl = searchUrl + sep.join(searchKeys)
-        self.log.debug("Search URL: " + searchQueryUrl)
+        # self.log.debug("Search URL: " + searchQueryUrl)
         return searchQueryUrl
 
     
