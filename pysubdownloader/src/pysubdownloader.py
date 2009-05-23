@@ -13,13 +13,13 @@ from sites.TvSubsSite import TvSubsSite
 
     
 def parseOptions():
-   
+    
     parser = OptionParser()
     parser.add_option("-f", dest="folder", help="scan this folder and subfolders", metavar="FOLDER")
    # parser.add_option("-d", "--debug", action="store_true", dest="debug", default=False)
    # parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False)
-   # parser.add_option("--log", dest="logfile", help="logfile", metavar="LOGFILE")
-    parser.add_option("-l", dest="language", help="language to search subtitles for", type="choice", choices=("en","nl"))
+    parser.add_option("--log", dest="logfile", help="log to this file", metavar="LOGFILE")
+    parser.add_option("-l", dest="language", help="language to search subtitles for", type="choice", choices=("en","nl"),default="en")
     (options, args) = parser.parse_args()
     if options.folder is None:
         #usage()
@@ -27,25 +27,25 @@ def parseOptions():
         
     else: 
         path = options.folder 
-    if options.language is None:
-        parser.error("-l is a required option")
-    else: 
-        language = options.language   
-    return (path,language)
+#    if options.language is None:
+#        parser.error("-l is a required option")
+#    else: 
+#        language = options.language   
+    return (path,options.language,options.logfile)
 
 
-def startSubtitleDownloader(path,language):
-    inspector = Inspector()
+def startSubtitleDownloader(path,language,logfile):
+    inspector = Inspector(logfile)
     episodes = inspector.scan(path)
     try:
-        tvsub = TvSubtitleSite(language)
+        tvsub = TvSubtitleSite(language,logfile)
         tvsub.search(episodes)
     except (RuntimeError, ), e:
         raise
     
     try:
     	
-        podnapisi = PodnapisiSite(language)
+        podnapisi = PodnapisiSite(language,logfile)
         podnapisi.search(episodes)
     except (RuntimeError, ), e:
         raise
@@ -58,12 +58,13 @@ def startSubtitleDownloader(path,language):
 #        raise
 
 
-    
+def getOptions(self):
+    return self.options
 
 
 def main():
-    (path,language) = parseOptions()
-    startSubtitleDownloader(path,language)
+    (path,language,logfilepath) = parseOptions()
+    startSubtitleDownloader(path,language,logfilepath)
     
 
 if __name__ == '__main__':

@@ -8,8 +8,8 @@ from lib.FilenameParser import FilenameParser
 
 class Inspector(object):
     
-    def __init__(self):
-        self.parser = FilenameParser()
+    def __init__(self,logfile):
+        self.parser = FilenameParser(logfile)
         
     def scan(self,path):
         return self.findEpisodes(path)

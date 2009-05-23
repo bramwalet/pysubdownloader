@@ -6,7 +6,7 @@ Created on 18 mei 2009
 from classes.ConfigException import ConfigException
 from lib.LoggerFactory import LoggerFactory
 class AbstractSubtitleSite(object):
-    def __init__(self,language):
+    def __init__(self,language,logfile):
         (config,supportedLanguages) = self.setUp()
         try:    
             self.checkConfig(config)
@@ -19,9 +19,12 @@ class AbstractSubtitleSite(object):
             self.language = language
         except (ConfigException, ), e:
             raise     
-        self.setUpHandlers()
-        lf = LoggerFactory(self.config['siteName'])
+        self.logfile = logfile
+        lf = LoggerFactory(self.config['siteName'],logfile)
         self.log = lf.getLogger()
+        self.setUpHandlers()
+        
+       
         self.language = language
         
     
@@ -62,5 +65,5 @@ class AbstractSubtitleSite(object):
         filein = self.uh.executeRequest(downloadurl)
         archive = self.fh.openZipFile(filein) 
         if self.fh.extractZipFile(episode, archive):
-            self.log.debug("Extracted subtitle")
+            self.log.info("Extracted subtitle")
         

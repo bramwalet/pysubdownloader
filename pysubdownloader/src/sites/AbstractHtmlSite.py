@@ -5,6 +5,8 @@ Created on 20 mei 2009
 '''
 
 from lxml.html import fromstring
+from lxml import html
+
 import re
 
 from classes.Subtitle import Subtitle
@@ -21,8 +23,8 @@ class AbstractHtmlSite(AbstractSubtitleSite):
 
        
     def setUpHandlers(self):
-        self.fh = FileHandler()
-        self.uh = UrlHandler()
+        self.fh = FileHandler(self.logfile)
+        self.uh = UrlHandler(self.logfile)
     
     def checkConfig(self,config):
         requiredKeys = ('siteName','findTableString','findDownloadLink','baseUrl','searchUrl')
@@ -32,30 +34,36 @@ class AbstractHtmlSite(AbstractSubtitleSite):
         (searchKeys,sep) = self.getKeys(episode)
         searchUrl = self.config["searchUrl"]
         searchQueryUrl = searchUrl + sep.join(searchKeys)
-        # self.log.debug("Search URL: " + searchQueryUrl)
+        self.log.debug("Search URL: " + searchQueryUrl)
         return searchQueryUrl
 
     
     def search(self, episodes):
-        self.log.debug("Search for each episode.")
+        self.log.info("Search for each episode.")
         
         for episode in episodes:
-            self.log.debug("Search for " + episode.printEpisode())
+            self.log.info("Search for " + episode.printEpisode())
             searchUrl = self.createSearchQuery(episode)
             sub = self.searchEpisode(episode,searchUrl)
             if sub != None:
-                self.log.debug("Match found for episode: " + episode.printEpisode())
+                self.log.info("Match found for episode: " + episode.printEpisode())
                 self.downloadSubtitle(sub,episode)
                 
     def searchEpisode(self,episode,searchUrl):
         self.uh.installUrlHandler()
         response = self.uh.executeRequest(searchUrl)
-        doc = fromstring(response.read())
+        html = response.read()
+        #self.log.debug(html)
+        doc = fromstring(html)
         doc.make_links_absolute(searchUrl,self.config["baseUrl"])
         list = doc.find_class(self.config["findTableString"])
+      #  self.log.debug(str(list))
         for listitem in list:
+       #     self.log.debug(listitem.text_content())
             for (element, attribute, link, pos) in listitem.iterlinks():
+                self.log.debug("Evaluate URL: + " + str(link) + " in element " + str(element))
                 if re.search(self.config["findDownloadLink"],link):
+                    self.log.debug("Download URL found: + "+link)
                     return Subtitle(episode.serie, episode.season, episode.episode, link)
     
 #    def getLanguage(self,language,languageKeys):

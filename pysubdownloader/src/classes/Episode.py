@@ -11,7 +11,7 @@ class Episode(object):
     classdocs
     '''
 
-    def __init__(self, serie, year, season, episode, path, fileName):
+    def __init__(self, serie, year, season, episode, path, fileName,logfile):
         '''
         Constructor
         '''
@@ -22,7 +22,7 @@ class Episode(object):
         self.episode =  int(episodes[0])
         self.path = path
         self.fileName = fileName
-        lf = LoggerFactory("Episode")
+        lf = LoggerFactory("Episode",logfile)
         self.log = lf.getLogger()
 
     def getSerie(self):
