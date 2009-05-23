@@ -22,20 +22,19 @@ class PodnapisiSite(AbstractHtmlSite):
     
     def getKeys(self,episode):
         languageKeys = {"en":"2","es":"28","fr":"8","nl":"23","de":"5"}
-        searchKeys = ['tbsl=3',
-                'asdp=0', 
-                'sK='+ episode.serie,
-                'sJ=' + languageKeys[self.language], 
-                'sO=desc',
-                'sS=time',
-                'submit=Search', 
-                'sTS=' + episode.season,
-                'sTE=' + str(episode.episode),
-                'sY=' + episode.year, 
-                'sR', 
-                'sT=1']
-        sep = '&'
-        return (searchKeys,sep)
+        searchKeys = {"tbsl":"3", #tab 3 is tv series
+                "asdp":"1", #advanced search on 
+                "sK": episode.serie, #series name
+                "sJ": languageKeys[self.language], #language searched for 
+                "sO":"desc", #sorting
+                "sS":"time", #sorting
+                "submit":"Search", #button
+                "sTS": str(episode.season), #season
+                "sTE": str(episode.episode), #episode number
+                "sY": str(episode.year),  # series year
+                "sR":"",  # release
+                "sT":"1"} #
+        return searchKeys
     
       
       
