@@ -10,6 +10,7 @@ from classes.Episode import Episode
 class FileHandler(object):
     def extractZipFile(self, episode, archive):
         filesInZip = archive.namelist()
+        # TODO: warn or error if zip file has more than one file, or check which file we need.
         if len(filesInZip) == 1:
             for file in filesInZip:
                 srtfile = episode.generateSrtFilename()
