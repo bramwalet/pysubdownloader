@@ -22,8 +22,8 @@ class AbstractHtmlSite(AbstractSubtitleSite):
 
        
     def setUpHandlers(self):
-        self.fh = FileHandler(self.logfile)
-        self.uh = UrlHandler(self.logfile)
+        self.fh = FileHandler(self.logfile,self.debug)
+        self.uh = UrlHandler(self.logfile,self.debug)
     
     def checkConfig(self,config):
         requiredKeys = ('siteName','findTableString','findDownloadLink','baseUrl','searchUrl')

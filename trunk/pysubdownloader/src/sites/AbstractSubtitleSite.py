@@ -6,7 +6,7 @@ Created on 18 mei 2009
 from classes.ConfigException import ConfigException
 from lib.LoggerFactory import LoggerFactory
 class AbstractSubtitleSite(object):
-    def __init__(self,language,logfile):
+    def __init__(self,language,logfile,debug):
         (config,supportedLanguages) = self.setUp()
         try:    
             self.checkConfig(config)
@@ -20,7 +20,8 @@ class AbstractSubtitleSite(object):
         except (ConfigException, ), e:
             raise     
         self.logfile = logfile
-        lf = LoggerFactory(self.config['siteName'],logfile)
+        self.debug = debug 
+        lf = LoggerFactory(self.config['siteName'],logfile,debug)
         self.log = lf.getLogger()
         self.setUpHandlers()
         

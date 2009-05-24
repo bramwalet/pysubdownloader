@@ -13,15 +13,19 @@ class LoggerFactory(object):
     '''
 
 
-    def __init__(self,className,logfile):
+    def __init__(self,className,logfile,debug):
         '''
         Constructor
         '''
+        if debug == True:
+            loglevel = logging.DEBUG
+        else:
+            loglevel = logging.INFO
         self.log = logging.getLogger(className)
-        self.log.setLevel(logging.DEBUG)
+        self.log.setLevel(loglevel)
         consoleHandler = logging.StreamHandler()
         
-        consoleHandler.setLevel(logging.DEBUG)
+        consoleHandler.setLevel(loglevel)
         formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(name)s - %(message)s")
         consoleHandler.setFormatter(formatter)
         self.log.addHandler(consoleHandler)

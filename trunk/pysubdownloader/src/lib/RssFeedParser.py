@@ -15,13 +15,13 @@ class RssFeedParser(object):
     '''
 
 
-    def __init__(self,url,baseUrl,logfile):
+    def __init__(self,url,baseUrl,logfile,debug):
         '''
         Constructor
         '''
         self.url = url
         self.baseUrl = baseUrl
-        self.parser = FilenameParser(logfile)
+        self.parser = FilenameParser(logfile,debug)
         
         
     def parse(self):

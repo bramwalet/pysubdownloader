@@ -10,9 +10,9 @@ from lib.LoggerFactory import LoggerFactory
 
 class FileHandler(object):
     
-    def __init__(self,logfile):
+    def __init__(self,logfile,debug):
         self.logfile = logfile
-        lf = LoggerFactory("FileHandler",logfile)
+        lf = LoggerFactory("FileHandler",logfile,debug)
         self.log = lf.getLogger()
         
     def extractZipFile(self, episode, archive):
