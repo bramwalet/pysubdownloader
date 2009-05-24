@@ -23,7 +23,7 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 import feedparser, re
 
 from classes.Subtitle import Subtitle
-from lib.FilenameParser import FilenameParser
+from parsers.FilenameParser import FilenameParser
 
 class RssFeedParser(object):
     '''
@@ -37,7 +37,9 @@ class RssFeedParser(object):
         '''
         self.url = url
         self.baseUrl = baseUrl
-        self.parser = FilenameParser(logfile,debug)
+        self.logfile = logfile
+        self.debug = debug
+        self.parser = FilenameParser()
         
         
     def parse(self):

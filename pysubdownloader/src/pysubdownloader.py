@@ -23,9 +23,10 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 import sys
 from optparse import OptionParser
 from lib.Inspector import Inspector
-from sites.TvSubtitleSite import TvSubtitleSite
+#from sites.TvSubtitleSite import TvSubtitleSite
 from sites.PodnapisiSite import PodnapisiSite
-from sites.TvSubsSite import TvSubsSite
+from sites.TvSubtitleSite import TvSubtitleSite
+#from sites.TvSubsSite import TvSubsSite
 
     
 def parseOptions():
@@ -51,18 +52,18 @@ def parseOptions():
 
 
 def startSubtitleDownloader(path,language,logfile,debug):
-    inspector = Inspector(logfile,debug)
+    inspector = Inspector()
     episodes = inspector.scan(path)
     try:
         tvsub = TvSubtitleSite(language,logfile,debug)
-        tvsub.search(episodes)
+        tvsub.run(episodes,language)
     except (RuntimeError, ), e:
         raise
     
     try:
     	
         podnapisi = PodnapisiSite(language,logfile,debug)
-        podnapisi.search(episodes)
+        podnapisi.run(episodes,language)
     except (RuntimeError, ), e:
         raise
 
@@ -72,7 +73,6 @@ def startSubtitleDownloader(path,language,logfile,debug):
 #        tvsubs.search(episodes)
 #    except (RuntimeError, ), e:
 #        raise
-
 
 
 def main():

@@ -27,7 +27,7 @@ class Episode(object):
     classdocs
     '''
 
-    def __init__(self, serie, year, season, episode, path, fileName,logfile,debug):
+    def __init__(self, serie, year, season, episode, path, fileName):
         '''
         Constructor
         '''
@@ -38,8 +38,6 @@ class Episode(object):
         self.episode =  int(episodes[0])
         self.path = path
         self.fileName = fileName
-        lf = LoggerFactory("Episode",logfile,debug)
-        self.log = lf.getLogger()
 
     def getSerie(self):
         return self.__serie
@@ -126,10 +124,10 @@ class Episode(object):
             return False
         if self.season != sub.getSeason():
             return False
-        if self.episode != sub.getEpisode():
+        if self.episode != int(sub.getEpisode()):
             return False   
         if sub.isDoubleEpisode():
-            self.log.error("Double episodes not supported")
+            #self.log.error("Double episodes not supported")
             return False         
         
         return True

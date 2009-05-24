@@ -19,41 +19,41 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: Bram Walet
 '''
-from sites.AbstractHtmlSite import AbstractHtmlSite
+from sites.components.AbstractSubtitleSite import AbstractSubtitleSite
+from sites.components.search.HtmlSearchComponent import HtmlSearchComponent
+from sites.components.download.HttpDownloadComponent import HttpDownloadComponent
 
 
-class PodnapisiSite(AbstractHtmlSite):
+
+class PodnapisiSite(AbstractSubtitleSite):
     '''
     classdocs
     '''
         
-    def setUp(self):
-        supportedLanguages = ("en", "es", "fr", "de", "br", "ru", "ua", "it", "gr", "ar","hu", "pl","tr")
-        config = { "siteName" : "Podnapisi",
-                   "findTableString" : 'list',
+    def setUp(self,logfile,debug):
+        search = HtmlSearchComponent(logfile,debug)
+        download = HttpDownloadComponent(logfile,debug)
+        return (search,download)
+    def getSiteName(self):
+        return "Podnapisi"
+    
+    def setupSearch(self):
+        config = { "findTableString" : 'list',
                    "findDownloadLink" : 'download',
-                   "baseUrl" : "http://simple.podnapisi.net/ppodnapisi/",
-                   "searchUrl" : "http://simple.podnapisi.net/ppodnapisi/search?" }
-        return (config,supportedLanguages)
+                   "searchUrl" : "http://simple.podnapisi.net/ppodnapisi/search?",
+                   "baseUrl" : "http://simple.podnapisi.net/ppodnapisi/" }
+        return (config)
+  
+    def setupLanguages(self):
+        supportedLanguages = ("en", "es", "fr", "de", "br", "ru", "ua", "it", "gr", "ar","hu", "pl","tr")
+#        config = { "siteName" : "Podnapisi",
+#                   "baseUrl" : "http://simple.podnapisi.net/ppodnapisi/"}
+#                  
+        return supportedLanguages
     
-    def getKeys(self,episode):
-        languageKeys = {"en":"2","es":"28","fr":"8","nl":"23","de":"5"}
-        searchKeys = {"tbsl":"3", #tab 3 is tv series
-                "asdp":"1", #advanced search on 
-                "sK": episode.serie, #series name
-                "sJ": languageKeys[self.language], #language searched for 
-                "sO":"desc", #sorting
-                "sS":"time", #sorting
-                "submit":"Search", #button
-                "sTS": str(episode.season), #season
-                "sTE": str(episode.episode), #episode number
-                "sY": str(episode.year),  # series year
-                "sR":"",  # release
-                "sT":"1"} #
-        return searchKeys
+        
     
-      
-      
+   
 
 
        
