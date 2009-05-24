@@ -50,8 +50,14 @@ class FilenameParser(object):
         return e
     
     def parseEpisodeString(self,seasonEpisodeString):
-        (season, episode) = seasonEpisodeString.split("x", 2)
-        return episode, season
+        if re.search("x",seasonEpisodeString):
+            (season, episode) = seasonEpisodeString.split("x", 2)
+            return episode, season
+        if re.search("S[0-9]{2}E[0-9]{2}",seasonEpisodeString):
+            matches = re.match("S([0-9]{1,2})E([0-9]{1,2})",seasonEpisodeString)
+            season = matches.group(1)
+            episode = matches.group(2)
+            return episode, season
 
     def isMovie(self,filename):
         (fileBaseName, fileExtension) = os.path.splitext(filename)
