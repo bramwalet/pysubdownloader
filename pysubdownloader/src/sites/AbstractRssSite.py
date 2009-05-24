@@ -18,11 +18,11 @@ class AbstractRssSite(AbstractSubtitleSite):
 
     
     def setUpHandlers(self):
-        self.fh = FileHandler(self.logfile)
-        self.uh = UrlHandler(self.logfile)
-        self.fparser = FilenameParser(self.logfile)
+        self.fh = FileHandler(self.logfile,self.debug)
+        self.uh = UrlHandler(self.logfile,self.debug)
+        self.fparser = FilenameParser(self.logfile,self.debug)
         rssFeedUrl = self.getRssFeedUrl(self.language)
-        self.rssparser = RssFeedParser(rssFeedUrl, self.config["baseUrl"],self.logfile)
+        self.rssparser = RssFeedParser(rssFeedUrl, self.config["baseUrl"],self.logfile,self.debug)
 
     def checkConfig(self,config):
         requiredKeys = ('siteName','baseUrl','rssFeed')

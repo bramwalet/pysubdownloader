@@ -9,18 +9,19 @@ from lib.LoggerFactory import LoggerFactory
       
 class UrlHandler(object):
     
-    def __init__(self,logfile):
+    def __init__(self,logfile,debug):
         self.urllib2 = urllib2
         self.logfile = logfile
-        lf = LoggerFactory("UrlHandler",logfile)
-        self.log2 = lf.getLogger()
+        lf = LoggerFactory("UrlHandler",logfile,debug)
+        self.log = lf.getLogger()
+        self.debug = debug
     def executeRequest(self, downloadurl):
-        self.log2.debug("Execute Request URL: " + downloadurl)
+        self.log.debug("Execute Request URL: " + downloadurl)
         request = self.urllib2.Request(downloadurl)
         response = self.urllib2.urlopen(request)
         return response
     def installUrlHandler(self):
-        http_handler = self.urllib2.HTTPHandler(debuglevel=True)
+        http_handler = self.urllib2.HTTPHandler(debuglevel=self.debug)
         opener = self.urllib2.build_opener(http_handler)
         self.urllib2.install_opener(opener)
 

@@ -13,10 +13,11 @@ class FilenameParser(object):
     '''
     ''' this method parses a filename based on a Serie - EpisodeString - Description syntax
     '''
-    def __init__(self,logfile):
-        lf = LoggerFactory("FilenameParser",logfile)
+    def __init__(self,logfile,debug):
+        lf = LoggerFactory("FilenameParser",logfile,debug)
         self.logfile = logfile
         self.log = lf.getLogger()
+        self.debug = debug
        
     def parseFileName(self,file,path):
         (dirName, fileName) = os.path.split(path)
@@ -35,7 +36,7 @@ class FilenameParser(object):
         #print fileBaseName
         seasonEpisodeString = list[1]
         (episode, season) = self.parseEpisodeString(seasonEpisodeString)
-        e = Episode(serieName, year, season, episode, dirName, fileName,self.logfile)
+        e = Episode(serieName, year, season, episode, dirName, fileName,self.logfile,self.debug)
         return e
     
     def parseEpisodeString(self,seasonEpisodeString):
