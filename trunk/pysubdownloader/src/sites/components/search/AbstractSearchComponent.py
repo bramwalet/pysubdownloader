@@ -1,5 +1,5 @@
 '''
-Created on 18 mei 2009
+Created on 24 mei 2009
 Copyright 2009 Bram Walet
 
 This file is part of PySubDownloader.
@@ -19,28 +19,15 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: Bram Walet
 '''
-import os
-from parsers.FilenameParser import FilenameParser
 
-class Inspector(object):
-    
-    def __init__(self):
-        self.parser = FilenameParser()
-        
-    def scan(self,path):
-        return self.findEpisodes(path)
-        
-    def findEpisodes(self, path):
-        episodes = []
-        for root, dirs, files in os.walk(path):
-            for file in files:
-                episodePath = os.path.join(root,file)
-                if self.parser.isMovie(file) & self.parser.hasNoSrt(episodePath):
-                    episodes.append(self.parser.parseFileName(file,episodePath))
-        return episodes
-    
-    def getEpisodes(self):
-        return self.episodes
-    
+from sites.components.AbstractComponent import AbstractComponent
 
-        
+class AbstractSearchComponent(AbstractComponent):
+    '''
+    classdocs
+    '''
+      
+    def search(self,episodes,language): abstract
+    def checkConfig(self,config): abstract
+    def setupHandlers(self): abstract
+ 

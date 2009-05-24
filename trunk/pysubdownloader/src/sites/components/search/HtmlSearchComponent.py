@@ -1,5 +1,6 @@
 '''
-Created on 20 mei 2009
+Created on 24 mei 2009
+
 Copyright 2009 Bram Walet
 
 This file is part of PySubDownloader.
@@ -19,32 +20,45 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: Bram Walet
 '''
-
+# external imports
 from lxml.html import fromstring
 from lxml import html
 import urllib, re
 
-from classes.Subtitle import Subtitle
-from classes.ConfigException import ConfigException
+# internal imports
 from handlers.FileHandler import FileHandler
 from handlers.UrlHandler import UrlHandler
-from sites.AbstractSubtitleSite import AbstractSubtitleSite
+from classes.Subtitle import Subtitle
+from sites.components.search.AbstractSearchComponent import AbstractSearchComponent
 
-
-class AbstractHtmlSite(AbstractSubtitleSite):
+class HtmlSearchComponent(AbstractSearchComponent):
     '''
     classdocs
     '''
 
-       
-    def setUpHandlers(self):
-        self.fh = FileHandler(self.logfile,self.debug)
+    def setupHandlers(self):
+        #self.fh = FileHandler(self.logfile,self.debug)
         self.uh = UrlHandler(self.logfile,self.debug)
     
+    def search(self, episodes,language):
+        self.language = language
+        self.log.info("Search for each episode.")
+        downloadList = []
+        for episode in episodes:
+            self.log.info("Search for " + episode.printEpisode())
+            searchUrl = self.createSearchQuery(episode)
+            sub = self.searchEpisode(episode,searchUrl)
+            if sub != None:
+                self.log.info("Match found for episode: " + episode.printEpisode())
+                downloadListItem = (sub,episode)
+                downloadList.append(downloadListItem)
+                
+        return downloadList
+     
     def checkConfig(self,config):
-        requiredKeys = ('siteName','findTableString','findDownloadLink','baseUrl','searchUrl')
-        super(AbstractHtmlSite,self).checkConfig(config,requiredKeys)
-        
+        requiredKeys = ('findTableString','findDownloadLink','searchUrl')
+        super(AbstractSearchComponent,self).checkConfigByKeys(config,requiredKeys)
+              
     def createSearchQuery(self,episode): 
         searchKeys = self.getKeys(episode)
         searchUrl = self.config["searchUrl"]
@@ -53,17 +67,7 @@ class AbstractHtmlSite(AbstractSubtitleSite):
         return searchQueryUrl
 
     
-    def search(self, episodes):
-        self.log.info("Search for each episode.")
-        
-        for episode in episodes:
-            self.log.info("Search for " + episode.printEpisode())
-            searchUrl = self.createSearchQuery(episode)
-            sub = self.searchEpisode(episode,searchUrl)
-            if sub != None:
-                self.log.info("Match found for episode: " + episode.printEpisode())
-                self.downloadSubtitle(sub,episode)
-                
+   
     def searchEpisode(self,episode,searchUrl):
         self.uh.installUrlHandler()
         response = self.uh.executeRequest(searchUrl)
@@ -81,6 +85,19 @@ class AbstractHtmlSite(AbstractSubtitleSite):
                     self.log.debug("Download URL found: + "+link)
                     return Subtitle(episode.serie, episode.season, episode.episode, link)
     
-#    def getLanguage(self,language,languageKeys):
-#        return languageKeys[language]
-#                      
+    def getKeys(self,episode):
+        languageKeys = {"en":"2","es":"28","fr":"8","nl":"23","de":"5"}
+        searchKeys = {"tbsl":"3", #tab 3 is tv series
+                "asdp":"1", #advanced search on 
+                "sK": episode.serie, #series name
+                "sJ": languageKeys[self.language], #language searched for 
+                "sO":"desc", #sorting
+                "sS":"time", #sorting
+                "submit":"Search", #button
+                "sTS": str(episode.season), #season
+                "sTE": str(episode.episode), #episode number
+                "sY": str(episode.year),  # series year
+                "sR":"",  # release
+                "sT":"1"} #
+        return searchKeys
+    

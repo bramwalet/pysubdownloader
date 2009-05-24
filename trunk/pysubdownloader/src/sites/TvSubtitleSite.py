@@ -19,24 +19,33 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: Bram Walet
 '''
-from sites.AbstractRssSite import AbstractRssSite
+from sites.components.AbstractSubtitleSite import AbstractSubtitleSite
+from sites.components.download.HttpDownloadComponent import HttpDownloadComponent
+from sites.components.search.RssSearchComponent import RssSearchComponent
 
-class TvSubtitleSite(AbstractRssSite):
-    '''
-    classdocs
-    '''
-   
-    def setUp(self):
-         supportedLanguages = ("en", "es", "fr", "de", "br", "ru", "ua", "it", "gr", "ar","hu", "pl","tr")
-         config =  { "siteName" : "TvSubtitles",
-                     "rssFeed"  : "http://www.tvsubtitles.net/rss#lang#.xml",
+class TvSubtitleSite(AbstractSubtitleSite):
+    
+    def setUp(self,logfile,debug):
+        search = RssSearchComponent(logfile,debug)
+        download = HttpDownloadComponent(logfile,debug)
+        return (search,download)
+    
+    def getSiteName(self):
+        return "TvSubtitles"
+    
+    def setupSearch(self):
+        config =  {  "rssFeed"  : "http://www.tvsubtitles.net/rssen.xml",
                      "baseUrl"  : "http://www.tvsubtitles.net/" }
-         
-         return (config,supportedLanguages)
-    
+       
+        return (config)
   
-        
-    
+    def setupLanguages(self):
+        supportedLanguages = ("en", "es", "fr", "de", "br", "ru", "ua", "it", "gr", "ar","hu", "pl","tr")
+#         config = { "siteName" : "Podnapisi",
+#                   "baseUrl" : "http://simple.podnapisi.net/ppodnapisi/"}
+#                  
+        return supportedLanguages
+
     
 
  
