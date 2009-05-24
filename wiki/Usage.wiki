@@ -29,7 +29,7 @@ this specifies the folder in which the tv series are located. This folder is sca
 
 option: -l
 this specifies the language in which the subtitles should be searched for. The language is specified according to the [http://www.iso.org/iso/english_country_names_and_code_elements ISO 3166] list. 
-This is a required option. To use english use {{{-l en}}}.
+It defaults to English. To use Dutch use {{{-l nl}}}.
 
 == Results ==
 
