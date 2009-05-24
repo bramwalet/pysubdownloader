@@ -33,7 +33,7 @@ class Episode(object):
         '''
         self.serie = serie
         self.year = year
-        self.season = season
+        self.season = int(season)
         episodes = episode.split('-')
         self.episode =  int(episodes[0])
         self.path = path
@@ -116,13 +116,13 @@ class Episode(object):
         return self.__episode
         
     def printEpisode(self):
-        return "serie: " + self.serie + " Season: " + self.season + " Episode: " + str(self.episode)
+        return "serie: " + self.serie + " Season: " + str(self.season) + " Episode: " + str(self.episode)
         
     def appropriateSub(self,sub):
   
         if self.serie != sub.getSerie():
             return False
-        if self.season != sub.getSeason():
+        if self.season != int(sub.getSeason()):
             return False
         if self.episode != int(sub.getEpisode()):
             return False   
