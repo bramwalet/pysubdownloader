@@ -29,6 +29,7 @@ class Subtitle(object):
         self.season = season
         self.episode = episode
         self.link = link
+        
 
     def getSerie(self):
         return self._serie
