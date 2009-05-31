@@ -4,7 +4,7 @@ Created on 30 mei 2009
 @author: Bram Walet
 '''
 
-import xml.sax
+from xml.etree.ElementTree import fromstring, dump
 import urllib, re
 
 # internal imports
@@ -12,7 +12,7 @@ from handlers.FileHandler import FileHandler
 from handlers.UrlHandler import UrlHandler
 from classes.Subtitle import Subtitle
 from sites.components.search.AbstractSearchComponent import AbstractSearchComponent
-from parsers.XmlSubtitleListParser import XmlSubtitleListParser
+
 
 class XmlSearchComponent(AbstractSearchComponent):
     '''
@@ -54,28 +54,25 @@ class XmlSearchComponent(AbstractSearchComponent):
     def searchEpisode(self,episode,searchUrl):
         self.uh.installUrlHandler()
         response = self.uh.executeRequest(searchUrl)
-        parser = xml.sax.make_parser() 
-        subhandler = XmlSubtitleListParser("subtitle")
-        parser.setContentHandler(subhandler)
-        list = parser.parse(response)
-        
-#        html = response.read()
-#        #self.log.debug(html)
-#        doc = fromstring(html)
-#        doc.make_links_absolute(searchUrl,self.config["baseUrl"])
-#        list = doc.find_class(self.config["findTableString"])
+        xml = fromstring(response.read())
+       # dump(xml)
+        subtitle = xml.find("subtitle")
+        if subtitle is not None:
+            children = subtitle.getchildren()
+            for child in children: 
+                if child.tag == "title":
+                    title = child.text      
+                if child.tag == "tvSeason":
+                    season = child.text
+                if child.tag == "tvEpisode":
+                    episode = child.text 
+                if child.tag == "id":
+                    id = child.text   
+                
+            link = "http://simple.podnapisi.net/ppodnapisi/download/i/" + id
+            return Subtitle(title,season, episode, link)
+#       
 #        
-#        
-      #  self.log.debug(str(list))
-        if list is not None:
-            for listitem in list:
-           #     self.log.debug(listitem.text_content())
-                for (element, attribute, link, pos) in listitem.iterlinks():
-                    #self.log.debug("Evaluate URL: + " + str(link) + " in element " + str(element))
-                    if re.search(self.config["findDownloadLink"],link):
-                        self.log.debug("Download URL found: + "+link)
-                        return Subtitle(episode.serie, episode.season, episode.episode, link)
-        
     def getKeys(self,episode):
         languageKeys = {"en":"2","es":"28","fr":"8","nl":"23","de":"5"}
         searchKeys = {"tbsl":"3", #tab 3 is tv series
