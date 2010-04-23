@@ -21,14 +21,13 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
 import zipfile, StringIO
-from classes.Episode import Episode
 from lib.LoggerFactory import LoggerFactory
 
 class FileHandler(object):
     
-    def __init__(self,logfile,debug):
+    def __init__(self, logfile, debug):
         self.logfile = logfile
-        lf = LoggerFactory("FileHandler",logfile,debug)
+        lf = LoggerFactory("FileHandler", logfile, debug)
         self.log = lf.getLogger()
         
     def extractZipFile(self, episode, archive):
@@ -45,7 +44,19 @@ class FileHandler(object):
                 return True
         else:
             return False
-    def openZipFile(self, filein):
-        archive = zipfile.ZipFile(StringIO.StringIO(filein.read()))
+    def openZipFile(self, content):
+        try:
+            fileContent = StringIO.StringIO(content)
+            archive = zipfile.ZipFile(fileContent)
+        except:
+            return None
         return archive
 
+    def isZipFile(self, content):
+        try:
+            fileContent = StringIO.StringIO(content)
+            zipfile.ZipFile(fileContent)
+        except:
+            return False
+        return True
+    

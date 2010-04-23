@@ -23,12 +23,13 @@ import re
 
 class Subtitle(object):
     
-    def __init__(self, serie, season, episode, link):
+    def __init__(self, serie, season, episode, link, id):
     
         self.serie = serie
         self.season = season
         self.episode = episode
         self.link = link
+        self.id = id
         
 
     def getSerie(self):
@@ -46,7 +47,9 @@ class Subtitle(object):
     def getLink(self):
         return self._link
 
-
+    def getId(self):
+        return self._id
+    
     def setSerie(self, value):
         self._serie = value
 
@@ -62,7 +65,9 @@ class Subtitle(object):
     def setLink(self, value):
         self._link = value
 
-
+    def setId(self, value):
+        self._id = value
+        
     def delSerie(self):
         del self._serie
 
@@ -78,9 +83,11 @@ class Subtitle(object):
     def delLink(self):
         del self._link
 
+    def delId(self):
+        del self._id
 
     def printSubtitle(self):
-        return "Subtitle for serie: " + self.serie +  " Season: " + self.season + " Episode: " + self.episode
+        return "Subtitle for serie: " + self.serie +  " Season: " + self.season + " Episode: " + self.episode + " Id: " + id
    
     def isDoubleEpisode(self):
         # TODO: this should also be implemented at Episode
@@ -93,3 +100,6 @@ class Subtitle(object):
     episode = property(getEpisode, setEpisode, delEpisode, "Episode's Docstring")
 
     link = property(getLink, setLink, delLink, "Link's Docstring")
+    
+    id = property(getId, setId, delId, "Id's Docstring")
+    

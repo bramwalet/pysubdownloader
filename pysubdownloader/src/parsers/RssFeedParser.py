@@ -74,8 +74,9 @@ class RssFeedParser(object):
                     serietitle = serietitle + " " + word
 
         (episode, season) = self.parser.parseEpisodeString(seasonEpisodeString)
-        link = self.baseUrl + "download-" + self.getId(link) + ".html"
-        sub = Subtitle(serietitle, season, episode, link)
+        id = self.getId(link)
+        link = self.baseUrl + "download-" + id + ".html"
+        sub = Subtitle(serietitle, season, episode, link, id)
         return sub
    
     def getId(self,displayLink):

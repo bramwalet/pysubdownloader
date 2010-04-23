@@ -20,28 +20,12 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: Bram Walet
 '''
-from classes.ConfigException import ConfigException
 from lib.LoggerFactory import LoggerFactory
-import sites.components
-import sites.components.download
-import sites.components.search
 
 class AbstractSubtitleSite(object):
     
     def __init__(self,language,logfile,debug):
-#        (config,supportedLanguages) = self.setUp()
-#        try:    
-#            self.checkConfig(config)
-#            self.config = config
-#        except (ConfigException, ), e:
-#            raise    
-#        try:    
-#            self.checkLanguage(supportedLanguages,language)
-#            #self.supportedLanguages = supportedLanguages
         self.language = language
-#        except (ConfigException, ), e:
-#            raise    
-        
          
         # assign class variables
         self.logfile = logfile
@@ -50,10 +34,8 @@ class AbstractSubtitleSite(object):
         
         (search,download) = self.setUp(logfile,debug)
         
-        
         languages = self.setupLanguages()
         #self.config = configGlobal
-        
         
         configSearch = self.setupSearch()
         #search.checkConfig(config)
@@ -80,25 +62,5 @@ class AbstractSubtitleSite(object):
         self.debug = debug
         self.sc.setLogger(self.log)
         self.dc.setLogger(self.log)
-
-#    def search(self,episodes): abstract
-#    
+ 
     def setUp(self,logfile,debug): abstract
-#    
-#    def setUpHandlers(self): abstract
-#    
-#   
-#    def checkLanguage(self,supportedLanguages,inputLanguage):
-#        if supportedLanguages is None:
-#            raise ConfigException("This site must support at least one language. Please return a list of supportedLanguages in method setUp()")
-#        languageFound = False
-#        for language in supportedLanguages:
-#            if language == inputLanguage:
-#               languageFound = True
-#                    
-#        if languageFound == False:
-#            raise ConfigException("This site does not support this language.")
-#       
-#                
-     
-       

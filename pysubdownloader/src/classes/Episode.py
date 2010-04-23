@@ -112,9 +112,6 @@ class Episode(object):
 
 
 
-    def getEpisode(self):
-        return self.__episode
-        
     def printEpisode(self):
         return "serie: " + self.serie + " Season: " + str(self.season) + " Episode: " + str(self.episode)
         
@@ -151,6 +148,3 @@ class Episode(object):
     _path = property(getPath, setPath, delPath, "Path's Docstring")
 
     _fileName = property(getFileName, setFileName, delFileName, "FileName's Docstring")
-
-
-  
