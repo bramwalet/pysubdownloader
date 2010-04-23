@@ -55,7 +55,7 @@ class XmlSearchComponent(AbstractSearchComponent):
         self.uh.installUrlHandler()
         response = self.uh.executeRequest(searchUrl)
         xml = fromstring(response.read())
-       # dump(xml)
+        dump(xml)
         subtitle = xml.find("subtitle")
         if subtitle is not None:
             children = subtitle.getchildren()
@@ -66,11 +66,12 @@ class XmlSearchComponent(AbstractSearchComponent):
                     season = child.text
                 if child.tag == "tvEpisode":
                     episode = child.text 
+                if child.tag == "url":
+                    link = child.text  
                 if child.tag == "id":
                     id = child.text   
                 
-            link = "http://simple.podnapisi.net/ppodnapisi/download/i/" + id
-            return Subtitle(title,season, episode, link)
+            return Subtitle(title,season, episode, link, id)
 #       
 #        
     def getKeys(self,episode):

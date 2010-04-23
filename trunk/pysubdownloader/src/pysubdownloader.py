@@ -34,7 +34,6 @@ def parseOptions():
     parser = OptionParser()
     parser.add_option("-f", dest="folder", help="scan this folder and subfolders", metavar="FOLDER")
     parser.add_option("-d", "--debug", action="store_true", dest="debug", default=False)
-   # parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False)
     parser.add_option("--log", dest="logfile", help="log to this file", metavar="LOGFILE")
     parser.add_option("-l", dest="language", help="language to search subtitles for", type="choice", choices=("en","nl"),default="en")
     (options, args) = parser.parse_args()
@@ -61,7 +60,6 @@ def startSubtitleDownloader(path,language,logfile,debug):
         raise
     
     try:
-    	
         podnapisi = PodnapisiSite(language,logfile,debug)
         podnapisi.run(episodes,language)
     except (RuntimeError, ), e:

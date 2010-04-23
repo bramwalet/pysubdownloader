@@ -24,6 +24,8 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 from handlers.FileHandler import FileHandler
 from handlers.UrlHandler import UrlHandler
 from sites.components.download.AbstractDownloadComponent import AbstractDownloadComponent
+from lxml.html import fromstring
+import lxml.html
 
 class HttpDownloadComponent(AbstractDownloadComponent):
     '''
@@ -33,17 +35,38 @@ class HttpDownloadComponent(AbstractDownloadComponent):
         self.fh = FileHandler(self.logfile,self.debug)
         self.uh = UrlHandler(self.logfile,self.debug)
     
+
+    def getContent(self, downloadurl):
+        filein = self.uh.executeRequest(downloadurl)
+        content = filein.read()
+        return content
+
+
+    def downloadSubtitleInternal(self, sub, episode, downloadurl):
+        content = self.getContent(downloadurl)
+        if (self.fh.isZipFile(content)):
+            self.log.info("Content is zip file")
+            archive = self.fh.openZipFile(content)
+            if archive is None:
+                self.log.warn("Download failed for " + downloadurl)
+            elif self.fh.extractZipFile(episode, archive):
+                self.log.info("Extracted subtitle")
+        else:
+            self.log.info("Content is probably HTML page, search for download link")
+            doc = fromstring(content)
+            doc.make_links_absolute(downloadurl)
+            links = doc.iterlinks()
+            for element, attribute, link, pos in links:
+                if ((link.find(sub.getId()) > 0) & (link.find("download") > 0)):
+                    self.log.info("Found link with ID and DOWNLOAD: " + link)
+                    self.downloadSubtitleInternal(sub,episode,link)
+
     def downloadSubtitle(self,sub,episode):
         downloadurl = sub.getLink()
         self.uh.installUrlHandler()
-        filein = self.uh.executeRequest(downloadurl)
-        archive = self.fh.openZipFile(filein) 
-        if self.fh.extractZipFile(episode, archive):
-            self.log.info("Extracted subtitle")
+        self.downloadSubtitleInternal(sub, episode, downloadurl)
+                    
             
     def checkConfig(self,config):
         requiredKeys = ('siteName')
-        super(AbstractHtmlSite,self).checkConfig(config,requiredKeys)
-     
-     
-     
+        super(self).checkConfig(config,requiredKeys)

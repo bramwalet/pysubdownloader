@@ -33,35 +33,31 @@ class RssSearchComponent(AbstractSearchComponent):
    
         
     def setupHandlers(self):
-       #self.fh = FileHandler(self.logfile,self.debug)
-       #self.uh = UrlHandler(self.logfile,self.debug)
         self.fparser = FilenameParser()
         
-    def checkConfig(self,config):
-        requiredKeys = ('siteName','baseUrl','rssFeed')
-        super(AbstractSearchComponent,self).checkConfig(config,requiredKeys)
+    def checkConfig(self, config):
+        requiredKeys = ('siteName', 'baseUrl', 'rssFeed')
+        super(AbstractSearchComponent, self).checkConfig(config, requiredKeys)
     
-    def search(self,episodes,language):
-         self.language = language
-         downloadList = []
-         self.log.info("Search for new episodes on RSS feed.")
-         rssFeedUrl = self.getRssFeedUrl(self.language)
-         self.rssparser = RssFeedParser(rssFeedUrl, self.config["baseUrl"],self.logfile,self.debug)
+    def search(self, episodes, language):
+        self.language = language
+        downloadList = []
+        self.log.info("Search for new episodes on RSS feed.")
+        rssFeedUrl = self.getRssFeedUrl(self.language)
+        self.rssparser = RssFeedParser(rssFeedUrl, self.config["baseUrl"], self.logfile, self.debug)
 
-         availableSubs = self.rssparser.parse()
-         for aSub in availableSubs: 
+        availableSubs = self.rssparser.parse()
+        for aSub in availableSubs: 
             for episode in episodes:
                 if episode.appropriateSub(aSub):
                     self.log.info("Match found for episode: " + episode.printEpisode())
-                    downloadListItem = (aSub,episode)
+                    downloadListItem = (aSub, episode)
                     downloadList.append(downloadListItem)
-         return downloadList
+        return downloadList
                     
-    def getRssFeedUrl(self,language):
-         rssFeedUrl = self.config["rssFeed"]
-         
-       #  blah = rssFeedUrl.replace("\#lang\#",language)
-         return rssFeedUrl       
+    def getRssFeedUrl(self, language):
+        rssFeedUrl = self.config["rssFeed"]
+        return rssFeedUrl       
      
 
          
