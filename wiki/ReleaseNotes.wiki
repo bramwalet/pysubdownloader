@@ -1,0 +1,10 @@
+#summary One-sentence summary of this page.
+
+= PySubDownloader 0.1.2 =
+
+- Fixed issues regarding download of podnapisi download site
+
+= PySubDownloader 0.1.1 =
+
+- Initial version
+
