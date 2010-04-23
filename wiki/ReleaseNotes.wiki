@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Release notes for each PySubDownloader version.
 
 = PySubDownloader 0.1.2 =
 
@@ -7,4 +7,3 @@
 = PySubDownloader 0.1.1 =
 
 - Initial version
-
