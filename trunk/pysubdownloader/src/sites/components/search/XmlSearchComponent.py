@@ -55,7 +55,7 @@ class XmlSearchComponent(AbstractSearchComponent):
         self.uh.installUrlHandler()
         response = self.uh.executeRequest(searchUrl)
         xml = fromstring(response.read())
-        dump(xml)
+      #  dump(xml)
         subtitle = xml.find("subtitle")
         if subtitle is not None:
             children = subtitle.getchildren()
