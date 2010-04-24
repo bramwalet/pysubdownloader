@@ -5,10 +5,9 @@ Created on 30 mei 2009
 '''
 
 from xml.etree.ElementTree import fromstring, dump
-import urllib, re
+import urllib
 
 # internal imports
-from handlers.FileHandler import FileHandler
 from handlers.UrlHandler import UrlHandler
 from classes.Subtitle import Subtitle
 from sites.components.search.AbstractSearchComponent import AbstractSearchComponent
@@ -20,28 +19,34 @@ class XmlSearchComponent(AbstractSearchComponent):
     '''
 
     def setupHandlers(self):
-        #self.fh = FileHandler(self.logfile,self.debug)
         self.uh = UrlHandler(self.logfile,self.debug)
     
+
+    def searchEpisode(self, episode):
+        self.log.info("Search for " + episode.printEpisode())
+        searchUrl = self.createSearchQuery(episode)
+        sub = self.searchEpisodeSub(episode, searchUrl)
+        if sub != None:
+            self.log.info("Match found for episode: " + episode.printEpisode())
+            downloadListItem = sub, episode
+            return downloadListItem
+        return None
+
     def search(self, episodes,language):
         self.language = language
         self.log.info("Search for each episode.")
         downloadList = []
         for episode in episodes:
-            self.log.info("Search for " + episode.printEpisode())
-            searchUrl = self.createSearchQuery(episode)
-            sub = self.searchEpisode(episode,searchUrl)
-            if sub != None:
-                self.log.info("Match found for episode: " + episode.printEpisode())
-                downloadListItem = (sub,episode)
+            downloadListItem = self.searchEpisode(episode)
+            if downloadListItem is not None:
                 downloadList.append(downloadListItem)
                 
         return downloadList
      
-    def checkConfig(self,config):
-        requiredKeys = ('findTableString','findDownloadLink','searchUrl')
-        super(AbstractSearchComponent,self).checkConfigByKeys(config,requiredKeys)
-              
+#    def checkConfig(self,config):
+#        requiredKeys = ('findTableString','findDownloadLink','searchUrl')
+#        super(AbstractSearchComponent,self).checkConfigByKeys(config,requiredKeys)
+#              
     def createSearchQuery(self,episode): 
         searchKeys = self.getKeys(episode)
         searchUrl = self.config["searchUrl"]
@@ -51,25 +56,39 @@ class XmlSearchComponent(AbstractSearchComponent):
 
     
    
-    def searchEpisode(self,episode,searchUrl):
+
+    def handleChildElement(self, child, searchTag):
+        value = None
+        if child.tag == searchTag:
+            value = child.text
+            self.log.debug(searchTag + " element: " + value)
+        return value
+
+    def searchEpisodeSub(self,episode,searchUrl):
         self.uh.installUrlHandler()
-        response = self.uh.executeRequest(searchUrl)
+        (response,subtype) = self.uh.executeRequest(searchUrl)
         xml = fromstring(response.read())
-      #  dump(xml)
+        self.log.debug("Response: " + str(dump(xml)))
         subtitle = xml.find("subtitle")
         if subtitle is not None:
+            self.log.debug("Subtitle element: " + str(dump(subtitle)))
             children = subtitle.getchildren()
             for child in children: 
-                if child.tag == "title":
-                    title = child.text      
-                if child.tag == "tvSeason":
-                    season = child.text
-                if child.tag == "tvEpisode":
-                    episode = child.text 
-                if child.tag == "url":
-                    link = child.text  
-                if child.tag == "id":
-                    id = child.text   
+                foundTitle = self.handleChildElement(child, "title")
+                if foundTitle is not None:
+                    title = foundTitle    
+                foundSeason = self.handleChildElement(child, "tvSeason")
+                if foundSeason is not None:
+                    season = foundSeason    
+                foundEpisode = self.handleChildElement(child, "tvEpisode")
+                if foundEpisode is not None:
+                    episode = foundEpisode    
+                foundLink = self.handleChildElement(child, "url")
+                if foundLink is not None:
+                    link = foundLink    
+                foundId = self.handleChildElement(child, "id")
+                if foundId is not None:
+                    id = foundId    
                 
             return Subtitle(title,season, episode, link, id)
 #       

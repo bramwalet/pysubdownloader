@@ -20,13 +20,13 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 @author: Bram Walet
 
 '''
-import sys
 from optparse import OptionParser
 from lib.Inspector import Inspector
 #from sites.TvSubtitleSite import TvSubtitleSite
 from sites.PodnapisiSite import PodnapisiSite
 from sites.TvSubtitleSite import TvSubtitleSite
 from lib.LoggerFactory import LoggerFactory
+from sites.BierdopjeSite import BierdopjeSite
 #from sites.TvSubsSite import TvSubsSite
 
     
@@ -61,6 +61,13 @@ def startSubtitleDownloader(path,language,logfile,debug, logger):
         tvsub.run(episodes,language)
     except (RuntimeError, ), e:
         raise
+    
+#    try:
+#        logger.info("Starting Bierdopje")
+#        bierdopje = BierdopjeSite(language,logfile,debug)
+#        bierdopje.run(episodes,language)
+#    except (RuntimeError, ), e:
+#        raise
     
     try:
         logger.info("Starting PodnapisiSite")

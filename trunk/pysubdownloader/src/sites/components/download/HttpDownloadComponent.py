@@ -25,7 +25,7 @@ from handlers.FileHandler import FileHandler
 from handlers.UrlHandler import UrlHandler
 from sites.components.download.AbstractDownloadComponent import AbstractDownloadComponent
 from lxml.html import fromstring
-import lxml.html
+
 
 class HttpDownloadComponent(AbstractDownloadComponent):
     '''
@@ -37,22 +37,23 @@ class HttpDownloadComponent(AbstractDownloadComponent):
     
 
     def getContent(self, downloadurl):
-        filein = self.uh.executeRequest(downloadurl)
+        (filein,subtype) = self.uh.executeRequest(downloadurl)
         content = filein.read()
-        return content
+        return content, subtype
 
 
     def downloadSubtitleInternal(self, sub, episode, downloadurl):
-        content = self.getContent(downloadurl)
-        if (self.fh.isZipFile(content)):
+        self.log.info("Trying to download subtitle id: " + sub.getId() + " for episode: " + episode.printEpisode())
+        (content,subtype) = self.getContent(downloadurl)
+        if (subtype == "zip") & (self.fh.isZipFile(content)):
             self.log.info("Content is zip file")
             archive = self.fh.openZipFile(content)
             if archive is None:
                 self.log.warn("Download failed for " + downloadurl)
             elif self.fh.extractZipFile(episode, archive):
                 self.log.info("Extracted subtitle")
-        else:
-            self.log.info("Content is probably HTML page, search for download link")
+        if (subtype == "html"):
+            self.log.info("Content is HTML page, search for download link")
             doc = fromstring(content)
             doc.make_links_absolute(downloadurl)
             links = doc.iterlinks()

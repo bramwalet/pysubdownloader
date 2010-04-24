@@ -19,7 +19,7 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: Bram Walet
 '''
-import logging, logging.handlers
+import logging.handlers
 
 
 

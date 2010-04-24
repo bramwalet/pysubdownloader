@@ -35,7 +35,8 @@ class UrlHandler(object):
         self.log.debug("Execute Request URL: " + downloadurl)
         request = self.urllib2.Request(downloadurl)
         response = self.urllib2.urlopen(request)
-        return response
+        responseInfo = response.info()
+        return response, responseInfo.subtype
     def installUrlHandler(self):
         http_handler = self.urllib2.HTTPHandler(debuglevel=self.debug)
         opener = self.urllib2.build_opener(http_handler)
