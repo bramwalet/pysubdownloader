@@ -21,11 +21,14 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 '''
 import os
 from parsers.FilenameParser import FilenameParser
+from lib.LoggerFactory import LoggerFactory
 
 class Inspector(object):
     
-    def __init__(self):
+    def __init__(self,  logfile, debug):
         self.parser = FilenameParser()
+        self.setupLogging(logfile, debug)
+       
         
     def scan(self,path):
         return self.findEpisodes(path)
@@ -36,11 +39,19 @@ class Inspector(object):
             for file in files:
                 episodePath = os.path.join(root,file)
                 if self.parser.isMovie(file) & self.parser.hasNoSrt(episodePath):
-                    episodes.append(self.parser.parseFileName(file,episodePath))
+                    self.log.info("Found movie file: " + file)
+                    episode = self.parser.parseFileName(file, episodePath)
+                    if episode is not None:
+                        self.log.info("Determined episode: " + episode.printEpisode())
+                        episodes.append(episode)
         return episodes
     
     def getEpisodes(self):
         return self.episodes
     
+    def setupLogging(self, logfile, debug):
+        lf = LoggerFactory("Inspector",logfile,debug)
+        self.logfile = logfile
+        self.log = lf.getLogger()
 
         
