@@ -1,5 +1,9 @@
 #summary Release notes for each PySubDownloader version.
 
+= PySubDownloader 0.1.4 =
+  * better logging
+  * fixed imports
+
 = PySubDownloader 0.1.3 =
   * Inspector doesn't crash if it fails to parse the filename.
   * refactoring
