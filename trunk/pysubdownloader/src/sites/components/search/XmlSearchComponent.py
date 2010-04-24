@@ -40,7 +40,7 @@ class XmlSearchComponent(AbstractSearchComponent):
             downloadListItem = self.searchEpisode(episode)
             if downloadListItem is not None:
                 downloadList.append(downloadListItem)
-        self.log.info("Found " + str(len(downloadList)) + " subs to download")       
+        self.log.info("Found " + str(len(downloadList)) + " sub(s) to download")       
         return downloadList
      
 #    def checkConfig(self,config):
