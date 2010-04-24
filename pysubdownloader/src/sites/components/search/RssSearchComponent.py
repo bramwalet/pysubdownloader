@@ -53,6 +53,8 @@ class RssSearchComponent(AbstractSearchComponent):
                     self.log.info("Match found for episode: " + episode.printEpisode())
                     downloadListItem = (aSub, episode)
                     downloadList.append(downloadListItem)
+                    
+        self.log.info("Found " + str(len(downloadList)) + " sub(s) to download")       
         return downloadList
                     
     def getRssFeedUrl(self, language):
