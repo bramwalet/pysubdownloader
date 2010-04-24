@@ -20,7 +20,7 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: Bram Walet
 '''
-from ConfigException import ConfigException
+from classes import ConfigException
 
 class AbstractComponent(object):
     '''
