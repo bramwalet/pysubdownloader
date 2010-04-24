@@ -30,12 +30,11 @@ class PodnapisiSite(AbstractSubtitleSite):
     classdocs
     '''
         
-    def setUp(self,logfile,debug):
-        
-        search = XmlSearchComponent(logfile,debug )
-        download = HttpDownloadComponent(logfile,debug)
+    def setUp(self, logfile, debug):
+        search = XmlSearchComponent(logfile, debug)
+        download = HttpDownloadComponent(logfile, debug)
     
-        return (search,download)
+        return (search, download)
     
     def getSiteName(self):
         return "Podnapisi"
@@ -48,7 +47,7 @@ class PodnapisiSite(AbstractSubtitleSite):
         return (config)
   
     def setupLanguages(self):
-        supportedLanguages = ("en", "es", "fr", "de", "br", "ru", "ua", "it", "gr", "ar","hu", "pl","tr")
+        supportedLanguages = ("en", "es", "fr", "de", "br", "ru", "ua", "it", "gr", "ar", "hu", "pl", "tr")
 #        config = { "siteName" : "Podnapisi",
 #                   "baseUrl" : "http://simple.podnapisi.net/ppodnapisi/"}
 #                  
