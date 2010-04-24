@@ -19,8 +19,7 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: Bram Walet
 '''
-import os.path, logging
-from lib.LoggerFactory import LoggerFactory
+import os.path
 
 class Episode(object):
     '''
@@ -35,7 +34,7 @@ class Episode(object):
         self.year = year
         self.season = int(season)
         episodes = episode.split('-')
-        self.episode =  int(episodes[0])
+        self.episode = int(episodes[0])
         self.path = path
         self.fileName = fileName
 
@@ -115,7 +114,7 @@ class Episode(object):
     def printEpisode(self):
         return "serie: " + self.serie + " Season: " + str(self.season) + " Episode: " + str(self.episode)
         
-    def appropriateSub(self,sub):
+    def appropriateSub(self, sub):
   
         if self.serie != sub.getSerie():
             return False
@@ -129,9 +128,18 @@ class Episode(object):
         
         return True
     
+
+    def generateFilename(self, ext):
+        fileBaseName, fileExt = os.path.splitext(self.fileName)
+        filename = os.path.join(self.path, fileBaseName + ext)
+        return filename
+
     def generateSrtFilename(self):
-        (fileBaseName,fileExt) = os.path.splitext(self.fileName)
-        return os.path.join(self.path , fileBaseName + ".srt")
+        return self.generateFilename(".srt")
+    
+    def generateZipFilename(self):
+        return self.generateFilename(".zip")
+       
     
     def isDoubleEpisode(self):
         # TODO: Implement

@@ -1,6 +1,7 @@
 '''
-Created on 18 mei 2009
-Copyright 2009 Bram Walet
+Created on 24 apr 2010
+
+Copyright 2009-2010 Bram Walet
 
 This file is part of PySubDownloader.
 
@@ -20,40 +21,25 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 @author: Bram Walet
 '''
 from sites.components.AbstractSubtitleSite import AbstractSubtitleSite
-from sites.components.search.XmlSearchComponent import XmlSearchComponent
+from sites.components.search.RssSearchComponent import RssSearchComponent
 from sites.components.download.HttpDownloadComponent import HttpDownloadComponent
 
-
-
-class PodnapisiSite(AbstractSubtitleSite):
-    '''
-    classdocs
-    '''
-        
-    def setUp(self,logfile,debug):
-        
-        search = XmlSearchComponent(logfile,debug )
-        download = HttpDownloadComponent(logfile,debug)
+class BierdopjeSite(AbstractSubtitleSite):
     
+    def setUp(self,logfile,debug):
+        search = RssSearchComponent(logfile,debug)
+        download = HttpDownloadComponent(logfile,debug)
         return (search,download)
     
     def getSiteName(self):
-        return "Podnapisi"
+        return "BierdopjeSite"
     
     def setupSearch(self):
-        config = { "findTableString" : 'list',
-                   "findDownloadLink" : 'download',
-                   "searchUrl" : "http://simple.podnapisi.net/ppodnapisi/search?",
-                   "baseUrl" : "http://simple.podnapisi.net/ppodnapisi/" }
+        config =  {  "rssFeed"  : "http://feeds.bierdopje.com/bierdopje/subs/dutch",
+                     "baseUrl"  : "http://feeds.bierdopje.com/bierdopje/subs/" }
+       
         return (config)
   
     def setupLanguages(self):
-        supportedLanguages = ("en", "es", "fr", "de", "br", "ru", "ua", "it", "gr", "ar","hu", "pl","tr")
-#        config = { "siteName" : "Podnapisi",
-#                   "baseUrl" : "http://simple.podnapisi.net/ppodnapisi/"}
-#                  
+        supportedLanguages = ("en", "nl")         
         return supportedLanguages
-
-
-
-       

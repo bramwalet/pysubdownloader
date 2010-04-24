@@ -19,9 +19,8 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: Bram Walet
 '''
-import os.path,re,logging
+import os.path,re
 from classes.Episode import Episode
-from lib.LoggerFactory import LoggerFactory
 
 class FilenameParser(object):
     '''
@@ -70,8 +69,8 @@ class FilenameParser(object):
         if re.search("x",seasonEpisodeString):
             (season, episode) = seasonEpisodeString.split("x", 2)
             return episode, season
-        if re.search("S[0-9]{2}E[0-9]{2}",seasonEpisodeString):
-            matches = re.match("S([0-9]{1,2})E([0-9]{1,2})",seasonEpisodeString)
+        if re.search("[sS][0-9]{2}[eE][0-9]{2}",seasonEpisodeString):
+            matches = re.match("[sS]([0-9]{1,2})[eE]([0-9]{1,2})",seasonEpisodeString)
             season = matches.group(1)
             episode = matches.group(2)
             return episode, season

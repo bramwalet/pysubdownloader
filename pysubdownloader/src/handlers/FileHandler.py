@@ -22,6 +22,7 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 
 import zipfile, StringIO
 from lib.LoggerFactory import LoggerFactory
+import os
 
 class FileHandler(object):
     
@@ -30,32 +31,66 @@ class FileHandler(object):
         lf = LoggerFactory("FileHandler", logfile, debug)
         self.log = lf.getLogger()
         
+
+    def determineSrtFilesInZip(self, filesInZip):
+        srtFilesInZip = []
+        for file in filesInZip:
+            fileBaseName, fileExt = os.path.splitext(file)
+            if fileExt == ".srt":
+                srtFilesInZip.append(file)
+        
+        return srtFilesInZip
+
+
+    def writeZipFile(self, episode, archive):
+        zipFile = episode.generateZipFilename()
+        self.log.debug("Zip filename: " + zipFile)
+        zip = open(zipFile, 'w')
+        zip.write(archive)
+        zip.close()
+
+
+    def writeSrtFile(self, episode, archive, file):
+        srtfile = episode.generateSrtFilename()
+        self.log.debug("SRT filename: " + srtfile)
+        srt = open(srtfile, 'w')
+        srt.write(archive.read(file))
+        srt.close()
+
     def extractZipFile(self, episode, archive):
         filesInZip = archive.namelist()
         self.log.debug("Files in zip: " + str(filesInZip))
-        # TODO: warn or error if zip file has more than one file, or check which file we need.
-        if len(filesInZip) == 1:
-            for file in filesInZip:
-                srtfile = episode.generateSrtFilename()
-                self.log.debug("SRT filename: " + srtfile)
-                srt = open(srtfile, 'w')
-                srt.write(archive.read(file))
-                srt.close()
+        srtFilesInZip = self.determineSrtFilesInZip(filesInZip)
+        self.log.debug("SRT Files in zip: " + str(srtFilesInZip))
+        
+        if len(srtFilesInZip) == 1:
+            for file in srtFilesInZip:
+                self.writeSrtFile(episode, archive, file)
                 return True
+        if len(srtFilesInZip) < 1:
+            self.log.warn("Found more than one file in zip. Extract aborted. Placing zip file instead")
+            self.writeZipFile(episode, archive)
+            return True
         else:
+            self.log.warn("Expected at least 1 SRT file in zip, none found.")
             return False
+        
+
+    def readZipFile(self, content):
+        fileContent = StringIO.StringIO(content)
+        archive = zipfile.ZipFile(fileContent)
+        return archive
+
     def openZipFile(self, content):
         try:
-            fileContent = StringIO.StringIO(content)
-            archive = zipfile.ZipFile(fileContent)
+            archive = self.readZipFile(content)
         except:
             return None
         return archive
 
     def isZipFile(self, content):
         try:
-            fileContent = StringIO.StringIO(content)
-            zipfile.ZipFile(fileContent)
+            self.readZipFile(content)
         except:
             return False
         return True

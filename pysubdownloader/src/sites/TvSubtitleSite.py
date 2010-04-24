@@ -45,7 +45,3 @@ class TvSubtitleSite(AbstractSubtitleSite):
 #                   "baseUrl" : "http://simple.podnapisi.net/ppodnapisi/"}
 #                  
         return supportedLanguages
-
-    
-
- 
