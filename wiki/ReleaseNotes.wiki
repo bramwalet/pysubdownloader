@@ -2,13 +2,13 @@
 
 = PySubDownloader 0.1.3 =
 
-* refactoring
-* more debug & info logging
+  * refactoring
+  * more debug & info logging
 
 = PySubDownloader 0.1.2 =
 
-* Fixed issues regarding download of podnapisi download site
+  * Fixed issues regarding download of podnapisi download site
 
 = PySubDownloader 0.1.1 =
 
-* Initial version
+  * Initial version
