@@ -34,16 +34,25 @@ class Inspector(object):
         return self.findEpisodes(path)
         
     def findEpisodes(self, path):
+        self.log.info("Walking path: " + path)
         episodes = []
+        unknownFiles = []
         for root, dirs, files in os.walk(path):
+            self.log.debug("Walking path: " + root)
             for file in files:
                 episodePath = os.path.join(root,file)
                 if self.parser.isMovie(file) & self.parser.hasNoSrt(episodePath):
-                    self.log.info("Found movie file: " + file)
+                    self.log.debug("Found movie file: " + file)
                     episode = self.parser.parseFileName(file, episodePath)
                     if episode is not None:
-                        self.log.info("Determined episode: " + episode.printEpisode())
+                        self.log.debug("Determined episode: " + episode.printEpisode())
                         episodes.append(episode)
+                    else:
+                        self.log.warn("Cannot determine episode from file: " + file)
+                        unknownFiles.append(file)
+        self.log.info("Found " + str(len(episodes)) + " episode(s) without subtitles.")
+        self.log.info("Found " + str(len(unknownFiles)) + " unknown movie file(s).")
+
         return episodes
     
     def getEpisodes(self):

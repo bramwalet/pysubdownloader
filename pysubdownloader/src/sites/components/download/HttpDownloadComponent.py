@@ -42,25 +42,35 @@ class HttpDownloadComponent(AbstractDownloadComponent):
         return content, subtype
 
 
+
+    def handleZipFile(self, episode, downloadurl, content):
+        self.log.debug("Content is zip file")
+        archive = self.fh.openZipFile(content)
+        if archive is None:
+            self.log.warn("Download failed for " + downloadurl)
+        elif self.fh.extractZipFile(episode, archive):
+            self.log.info("Extracted subtitle for: " + episode.printEpisode())
+
+
+    def handleHtmlPage(self, sub, episode, downloadurl, content):
+        self.log.debug("Content is HTML page, search for download link")
+        doc = fromstring(content)
+        doc.make_links_absolute(downloadurl)
+        links = doc.iterlinks()
+        for element, attribute, link, pos in links:
+            if ((link.find(sub.getId()) > 0) & (link.find("download") > 0)):
+                self.log.debug("Found link with ID and DOWNLOAD: " + link)
+                self.downloadSubtitleInternal(sub, episode, link)
+
     def downloadSubtitleInternal(self, sub, episode, downloadurl):
-        self.log.info("Trying to download subtitle id: " + sub.getId() + " for episode: " + episode.printEpisode())
+        self.log.debug("Trying to download subtitle id: " + sub.getId() + " for episode: " + episode.printEpisode())
         (content,subtype) = self.getContent(downloadurl)
         if (subtype == "zip") & (self.fh.isZipFile(content)):
-            self.log.info("Content is zip file")
-            archive = self.fh.openZipFile(content)
-            if archive is None:
-                self.log.warn("Download failed for " + downloadurl)
-            elif self.fh.extractZipFile(episode, archive):
-                self.log.info("Extracted subtitle")
-        if (subtype == "html"):
-            self.log.info("Content is HTML page, search for download link")
-            doc = fromstring(content)
-            doc.make_links_absolute(downloadurl)
-            links = doc.iterlinks()
-            for element, attribute, link, pos in links:
-                if ((link.find(sub.getId()) > 0) & (link.find("download") > 0)):
-                    self.log.info("Found link with ID and DOWNLOAD: " + link)
-                    self.downloadSubtitleInternal(sub,episode,link)
+            self.handleZipFile(episode, downloadurl, content)
+        elif (subtype == "html"):
+            self.handleHtmlPage(sub, episode, downloadurl, content)
+        else:
+            self.log.error("Unknown file type: " + subtype)
 
     def downloadSubtitle(self,sub,episode):
         downloadurl = sub.getLink()

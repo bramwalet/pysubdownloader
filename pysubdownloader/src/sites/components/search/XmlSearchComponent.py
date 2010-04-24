@@ -23,7 +23,7 @@ class XmlSearchComponent(AbstractSearchComponent):
     
 
     def searchEpisode(self, episode):
-        self.log.info("Search for " + episode.printEpisode())
+        self.log.debug("Search for " + episode.printEpisode())
         searchUrl = self.createSearchQuery(episode)
         sub = self.searchEpisodeSub(episode, searchUrl)
         if sub != None:
@@ -40,7 +40,7 @@ class XmlSearchComponent(AbstractSearchComponent):
             downloadListItem = self.searchEpisode(episode)
             if downloadListItem is not None:
                 downloadList.append(downloadListItem)
-                
+        self.log.info("Found " + str(len(downloadList)) + " subs to download")       
         return downloadList
      
 #    def checkConfig(self,config):
@@ -68,10 +68,10 @@ class XmlSearchComponent(AbstractSearchComponent):
         self.uh.installUrlHandler()
         (response,subtype) = self.uh.executeRequest(searchUrl)
         xml = fromstring(response.read())
-        self.log.debug("Response: " + str(dump(xml)))
+        self.log.debug("Response: " + str(xml))
         subtitle = xml.find("subtitle")
         if subtitle is not None:
-            self.log.debug("Subtitle element: " + str(dump(subtitle)))
+            self.log.debug("Subtitle element: " + str(subtitle))
             children = subtitle.getchildren()
             for child in children: 
                 foundTitle = self.handleChildElement(child, "title")
