@@ -27,27 +27,44 @@ class FilenameParser(object):
     '''
     classdocs
     '''
-    ''' this method parses a filename based on a Serie - EpisodeString - Description syntax
+    ''' this class parses a filename based on a Serie (Year) - EpisodeString - Description syntax where Year is optional
     '''
        
+
+    def determineSerieYear(self, serieName):
+        pattern = '\([0-9]{4}\)'
+        if re.search(pattern, serieName):
+            years = re.findall(pattern, serieName)
+            year = years[0]
+        else:
+            year = ""
+        return year
+
+
+    def determineSeasonEpisode(self, list):
+        seasonEpisodeString = list[1]
+        episode, season = self.parseEpisodeString(seasonEpisodeString)
+        return episode, season
+
+
+    def removeYearFromEpisodeName(self, serieName, year):
+        serieName = serieName.replace(year, "")
+        serieName = serieName.strip()
+        return serieName
+
     def parseFileName(self,file,path):
         (dirName, fileName) = os.path.split(path)
         (fileBaseName, fileExtension) = os.path.splitext(fileName)
         list = fileBaseName.split(" - ")
-        serieName = str(list[0])
-        pattern = '\([0-9]{4}\)'
-        if re.search(pattern,serieName):
-            years = re.findall(pattern, serieName)
-            year = years[0]
-            serieName = serieName.replace(year, "")
-            serieName =  serieName.strip()
-        else:
-            year = "" 
-        #print fileBaseName
-        seasonEpisodeString = list[1]
-        (episode, season) = self.parseEpisodeString(seasonEpisodeString)
-        e = Episode(serieName, year, season, episode, dirName, fileName)
-        return e
+        if len(list) < 2:
+            return None;
+        else: 
+            serieName = str(list[0])
+            year = self.determineSerieYear(serieName) 
+            serieName = self.removeYearFromEpisodeName(serieName, year)
+            (episode,season) = self.determineSeasonEpisode(list)
+            e = Episode(serieName, year, season, episode, dirName, fileName)
+            return e
     
     def parseEpisodeString(self,seasonEpisodeString):
         if re.search("x",seasonEpisodeString):

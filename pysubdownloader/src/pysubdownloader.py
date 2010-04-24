@@ -26,6 +26,7 @@ from lib.Inspector import Inspector
 #from sites.TvSubtitleSite import TvSubtitleSite
 from sites.PodnapisiSite import PodnapisiSite
 from sites.TvSubtitleSite import TvSubtitleSite
+from lib.LoggerFactory import LoggerFactory
 #from sites.TvSubsSite import TvSubsSite
 
     
@@ -50,16 +51,19 @@ def parseOptions():
     return (path,options.language,options.logfile,options.debug)
 
 
-def startSubtitleDownloader(path,language,logfile,debug):
-    inspector = Inspector()
+def startSubtitleDownloader(path,language,logfile,debug, logger):
+    inspector = Inspector(logfile, debug)
+    logger.info("Starting Inspector")
     episodes = inspector.scan(path)
     try:
+        logger.info("Starting TvSubtitleSite")
         tvsub = TvSubtitleSite(language,logfile,debug)
         tvsub.run(episodes,language)
     except (RuntimeError, ), e:
         raise
     
     try:
+        logger.info("Starting PodnapisiSite")
         podnapisi = PodnapisiSite(language,logfile,debug)
         podnapisi.run(episodes,language)
     except (RuntimeError, ), e:
@@ -75,9 +79,14 @@ def startSubtitleDownloader(path,language,logfile,debug):
 
 def main():
     (path,language,logfilepath,debug) = parseOptions()
-    startSubtitleDownloader(path,language,logfilepath,debug)
+    logger = setupLogging(logfilepath,debug)
+    startSubtitleDownloader(path,language,logfilepath,debug, logger)
     
-
+def setupLogging( logfile, debug):
+    lf = LoggerFactory("PySubDownloader",logfile,debug)
+    logfile = logfile
+    return lf.getLogger()
+        
 if __name__ == '__main__':
     main()  
     

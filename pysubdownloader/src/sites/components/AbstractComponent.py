@@ -21,6 +21,7 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 @author: Bram Walet
 '''
 from lib.LoggerFactory import LoggerFactory
+from ConfigException import ConfigException
 
 class AbstractComponent(object):
     '''
