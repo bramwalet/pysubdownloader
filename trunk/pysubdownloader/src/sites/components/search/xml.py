@@ -4,24 +4,25 @@ Created on 30 mei 2009
 @author: Bram Walet
 '''
 
-from xml.etree.ElementTree import fromstring, dump
+from classes.Subtitle import Subtitle
+from sites.components.search.AbstractSearchComponent import \
+    AbstractSearchComponent
+from lxml.etree import fromstring
 import urllib
+from lib.LoggerFactory import LoggerFactory
 
 # internal imports
-from handlers.UrlHandler import UrlHandler
-from classes.Subtitle import Subtitle
-from sites.components.search.AbstractSearchComponent import AbstractSearchComponent
 
 
 class XmlSearchComponent(AbstractSearchComponent):
     '''
     classdocs
     '''
+    def __init__(self,urlHandler):
+        self.uh = urlHandler
+        self.log = LoggerFactory.getLogger("XmlSearchComponent")
 
-    def setupHandlers(self):
-        self.uh = UrlHandler(self.logfile,self.debug)
-    
-
+        
     def searchEpisode(self, episode):
         self.log.debug("Search for " + episode.printEpisode())
         searchUrl = self.createSearchQuery(episode)

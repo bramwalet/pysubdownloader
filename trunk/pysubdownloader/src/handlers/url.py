@@ -25,20 +25,17 @@ from lib.LoggerFactory import LoggerFactory
       
 class UrlHandler(object):
     
-    def __init__(self,logfile,debug):
-        self.urllib2 = urllib2
-        self.logfile = logfile
-        lf = LoggerFactory("UrlHandler",logfile,debug)
-        self.log = lf.getLogger()
-        self.debug = debug
+    def __init__(self):
+        self.log = LoggerFactory.getLogger("UrlHandler")
+        
     def executeRequest(self, downloadurl):
         self.log.debug("Execute Request URL: " + downloadurl)
-        request = self.urllib2.Request(downloadurl)
-        response = self.urllib2.urlopen(request)
+        request = urllib2.Request(downloadurl)
+        response = urllib2.urlopen(request)
         responseInfo = response.info()
         return response, responseInfo.subtype
     def installUrlHandler(self):
-        http_handler = self.urllib2.HTTPHandler(debuglevel=self.debug)
-        opener = self.urllib2.build_opener(http_handler)
-        self.urllib2.install_opener(opener)
+        http_handler = urllib2.HTTPHandler(debuglevel=True)
+        opener = urllib2.build_opener(http_handler)
+        urllib2.install_opener(opener)
 

@@ -26,8 +26,7 @@ class AbstractSearchComponent(AbstractComponent):
     '''
     classdocs
     '''
-      
+        
     def search(self,episodes,language): abstract
     def checkConfig(self,config): abstract
-    def setupHandlers(self): abstract
  

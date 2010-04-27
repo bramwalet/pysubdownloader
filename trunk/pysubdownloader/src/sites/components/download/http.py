@@ -21,20 +21,19 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 @author: Bram Walet
 '''
 # local imports
-from handlers.FileHandler import FileHandler
-from handlers.UrlHandler import UrlHandler
 from sites.components.download.AbstractDownloadComponent import AbstractDownloadComponent
 from lxml.html import fromstring
+from lib.LoggerFactory import LoggerFactory
 
 
 class HttpDownloadComponent(AbstractDownloadComponent):
     '''
     classdocs
     '''
-    def setupHandlers(self):
-        self.fh = FileHandler(self.logfile,self.debug)
-        self.uh = UrlHandler(self.logfile,self.debug)
-    
+    def __init__(self,urlHandler,fileHandler):
+        self.uh = urlHandler
+        self.fh = fileHandler
+        self.log = LoggerFactory.getLogger("HttpDownloadComponent")
 
     def getContent(self, downloadurl):
         (filein,subtype) = self.uh.executeRequest(downloadurl)

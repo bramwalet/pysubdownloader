@@ -26,10 +26,8 @@ import os
 
 class FileHandler(object):
     
-    def __init__(self, logfile, debug):
-        self.logfile = logfile
-        lf = LoggerFactory("FileHandler", logfile, debug)
-        self.log = lf.getLogger()
+    def __init__(self):
+        self.log = LoggerFactory.getLogger("FileHandler")
         
 
     def determineSrtFilesInZip(self, filesInZip):

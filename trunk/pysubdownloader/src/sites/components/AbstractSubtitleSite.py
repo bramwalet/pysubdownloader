@@ -24,28 +24,24 @@ from lib.LoggerFactory import LoggerFactory
 
 class AbstractSubtitleSite(object):
     
-    def __init__(self,language,logfile,debug):
-        self.language = language
+    def __init__(self,searchComponent,downloadComponent):
+     #   self.language = language
          
         # assign class variables
-        self.logfile = logfile
-        self.debug = debug 
-        self.language = language
+    
         
-        (search,download) = self.setUp(logfile,debug)
+     #   (search,download) = self.setUp(logfile,debug)
         
         languages = self.setupLanguages()
         #self.config = configGlobal
         
         configSearch = self.setupSearch()
         #search.checkConfig(config)
-        self.sc = search
-        self.dc = download        
-        self.startLogger(self.getSiteName(),logfile,debug)
-       
+        self.sc = searchComponent
+        self.dc = downloadComponent     
+        self.startLogger(self.getSiteName())
+#       
         self.sc.setConfig(configSearch)
-        self.sc.setupHandlers()
-        self.dc.setupHandlers()
     
     def run(self,episodes,language):
         downloadList = self.sc.search(episodes,language)
@@ -54,13 +50,7 @@ class AbstractSubtitleSite(object):
                 (sub,episode) = downloadItem
                 self.dc.downloadSubtitle(sub,episode)
 
-    def startLogger(self,siteName,logfile,debug):
-        
-        lf = LoggerFactory(siteName,logfile,debug)
-        self.logfile = logfile
-        self.log = lf.getLogger()
-        self.debug = debug
-        self.sc.setLogger(self.log)
-        self.dc.setLogger(self.log)
+    def startLogger(self,siteName):
+        self.log = LoggerFactory.getLogger(siteName)
  
     def setUp(self,logfile,debug): abstract
