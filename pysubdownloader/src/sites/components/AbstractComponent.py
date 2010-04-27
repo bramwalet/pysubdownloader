@@ -26,9 +26,6 @@ class AbstractComponent(object):
     '''
     classdocs
     '''
-    def __init__(self,logfile,debug):
-        self.logfile = logfile
-        self.debug = debug
 
     def checkConfigByKeys(self,config,requiredKeys):
         if config is None:

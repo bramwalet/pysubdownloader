@@ -23,28 +23,20 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 import feedparser, re
 
 from classes.Subtitle import Subtitle
-from parsers.FilenameParser import FilenameParser
+from parsers.file import FilenameParser
 
 class RssFeedParser(object):
     '''
     classdocs
     '''
 
+    def __init__(self, filenameParser):
+        self.filenameParser = filenameParser
 
-    def __init__(self, url, baseUrl, logfile, debug):
-        '''
-        Constructor
-        '''
-        self.url = url
-        self.baseUrl = baseUrl
-        self.logfile = logfile
-        self.debug = debug
-        self.parser = FilenameParser()
         
-        
-    def parse(self):
+    def parse(self,url, baseUrl):
         items = []
-        feed = feedparser.parse(self.url)
+        feed = feedparser.parse(url)
         for feeditem in feed["items"]:
             sub = self.parseRssFeedItem(feeditem)
             if sub is not None:
@@ -93,7 +85,7 @@ class RssFeedParser(object):
         (seasonEpisodeString, serietitle) = self.parseItemTitle(serietitle, words)
                     
         if seasonEpisodeString is not None:
-            (episode, season) = self.parser.parseEpisodeString(seasonEpisodeString)
+            (episode, season) = self.filenameParser.parseEpisodeString(seasonEpisodeString)
             id = self.getId(link)
             sub = Subtitle(serietitle, season, episode, link, id)
             return sub

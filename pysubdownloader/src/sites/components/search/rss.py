@@ -20,20 +20,20 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: Bram Walet
 '''
-from sites.components.search.AbstractSearchComponent import AbstractSearchComponent
-from parsers.FilenameParser import FilenameParser
-from parsers.RssFeedParser import RssFeedParser
+from sites.components.search.AbstractSearchComponent import \
+    AbstractSearchComponent
+from lib.LoggerFactory import LoggerFactory
 
 class RssSearchComponent(AbstractSearchComponent):
     '''
     classdocs
     '''
 
+    def __init__(self,filenameParser, rssFeedParser):
+        self.fparser = filenameParser
+        self.rssparser = rssFeedParser
+        self.log = LoggerFactory.getLogger("RssSearchComponent")
 
-   
-        
-    def setupHandlers(self):
-        self.fparser = FilenameParser()
         
     def checkConfig(self, config):
         requiredKeys = ('siteName', 'baseUrl', 'rssFeed')
@@ -44,9 +44,8 @@ class RssSearchComponent(AbstractSearchComponent):
         downloadList = []
         self.log.info("Search for new episodes on RSS feed.")
         rssFeedUrl = self.getRssFeedUrl(self.language)
-        self.rssparser = RssFeedParser(rssFeedUrl, self.config["baseUrl"], self.logfile, self.debug)
-
-        availableSubs = self.rssparser.parse()
+        
+        availableSubs = self.rssparser.parse(rssFeedUrl, self.config["baseUrl"])
         for aSub in availableSubs: 
             for episode in episodes:
                 if episode.appropriateSub(aSub):

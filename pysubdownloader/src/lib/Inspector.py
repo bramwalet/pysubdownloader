@@ -20,17 +20,20 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 @author: Bram Walet
 '''
 import os
-from parsers.FilenameParser import FilenameParser
+from parsers.file import FilenameParser
 from lib.LoggerFactory import LoggerFactory
 
 class Inspector(object):
     
-    def __init__(self,  logfile, debug):
+#    def __init__(self, logfile, debug):
+#        self.parser = FilenameParser()
+#        self.setupLogging(logfile, debug)
+    def __init__(self):
         self.parser = FilenameParser()
-        self.setupLogging(logfile, debug)
+        self.setupLogging()
        
         
-    def scan(self,path):
+    def scan(self, path):
         return self.findEpisodes(path)
         
     def findEpisodes(self, path):
@@ -40,7 +43,7 @@ class Inspector(object):
         for root, dirs, files in os.walk(path):
             self.log.debug("Walking path: " + root)
             for file in files:
-                episodePath = os.path.join(root,file)
+                episodePath = os.path.join(root, file)
                 if self.parser.isMovie(file) & self.parser.hasNoSrt(episodePath):
                     self.log.debug("Found movie file: " + file)
                     episode = self.parser.parseFileName(file, episodePath)
@@ -58,9 +61,7 @@ class Inspector(object):
     def getEpisodes(self):
         return self.episodes
     
-    def setupLogging(self, logfile, debug):
-        lf = LoggerFactory("Inspector",logfile,debug)
-        self.logfile = logfile
-        self.log = lf.getLogger()
+    def setupLogging(self):
+        self.log = LoggerFactory.getLogger("Inspector")
 
         

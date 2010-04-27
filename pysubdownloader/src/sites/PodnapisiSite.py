@@ -20,8 +20,6 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 @author: Bram Walet
 '''
 from sites.components.AbstractSubtitleSite import AbstractSubtitleSite
-from sites.components.search.XmlSearchComponent import XmlSearchComponent
-from sites.components.download.HttpDownloadComponent import HttpDownloadComponent
 
 
 
@@ -29,12 +27,6 @@ class PodnapisiSite(AbstractSubtitleSite):
     '''
     classdocs
     '''
-        
-    def setUp(self, logfile, debug):
-        search = XmlSearchComponent(logfile, debug)
-        download = HttpDownloadComponent(logfile, debug)
-    
-        return (search, download)
     
     def getSiteName(self):
         return "Podnapisi"

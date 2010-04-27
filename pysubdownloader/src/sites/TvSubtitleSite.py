@@ -20,15 +20,8 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 @author: Bram Walet
 '''
 from sites.components.AbstractSubtitleSite import AbstractSubtitleSite
-from sites.components.download.HttpDownloadComponent import HttpDownloadComponent
-from sites.components.search.RssSearchComponent import RssSearchComponent
 
 class TvSubtitleSite(AbstractSubtitleSite):
-    
-    def setUp(self,logfile,debug):
-        search = RssSearchComponent(logfile,debug)
-        download = HttpDownloadComponent(logfile,debug)
-        return (search,download)
     
     def getSiteName(self):
         return "TvSubtitles"
