@@ -56,7 +56,7 @@ objects:
         api: {ref: bierdopjeApi}
 
     - object: bierdopjesite
-      class: sites.site.AbstractSubtitleSite
+      class: sites.AbstractSubtitleSite
       scope: singleton
       constructor-args:
         siteName: Bierdopje
@@ -64,12 +64,12 @@ objects:
         downloadComponent: {ref: htmlDownloader}
         searchComponent: 
             object: apiSearchBierdopje
-            class: sites.components.search.apisearch.ApiSearchComponent
+            class: sites.components.search.api.ApiSearchComponent
             properties: 
               wrapper: {ref: bierdopjeWrapper}
 
     - object: podnapisisite
-      class: sites.site.AbstractSubtitleSite
+      class: sites.AbstractSubtitleSite
       scope: singleton
       constructor-args:
         siteName: Podnapisi
@@ -89,7 +89,7 @@ objects:
                   de: 5
 
     - object: tvsubtitlessite
-      class: sites.site.AbstractSubtitleSite
+      class: sites.AbstractSubtitleSite
       scope: singleton
       constructor-args:
         siteName: TvSubtitles
