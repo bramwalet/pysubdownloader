@@ -50,7 +50,7 @@ objects:
         apikey: 
 
     - object: bierdopjeWrapper
-      class: sites.components.search.wrapper.bierdopje.BierdopjeWrapper
+      class: sites.components.search.api.bierdopje.BierdopjeWrapper
       scope: singleton
       properties:
         api: {ref: bierdopjeApi}

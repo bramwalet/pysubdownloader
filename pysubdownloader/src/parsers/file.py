@@ -20,7 +20,7 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 @author: Bram Walet
 '''
 import os.path,re
-from classes.Episode import Episode
+from classes import Episode
 
 class FilenameParser(object):
     '''

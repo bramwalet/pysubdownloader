@@ -21,7 +21,7 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 @author: Bram Walet
 '''
 # local imports
-from sites.components.download.AbstractDownloadComponent import AbstractDownloadComponent
+from sites.components.download import AbstractDownloadComponent
 from lxml.html import fromstring
 import logging
 
