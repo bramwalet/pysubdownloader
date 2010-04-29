@@ -3,7 +3,7 @@ Created on 24 apr 2010
 
 @author: b.walet
 '''
-from sites.components.search.AbstractSearchComponent import AbstractSearchComponent
+from sites.components.search import AbstractSearchComponent
 import logging
 
 class ApiSearchComponent(AbstractSearchComponent):
