@@ -23,12 +23,7 @@ import os.path,re
 from classes import Episode
 
 class FilenameParser(object):
-    '''
-    classdocs
-    '''
-    ''' this class parses a filename based on a Serie (Year) - EpisodeString - Description syntax where Year is optional
-    '''
-       
+   
 
     def determineSerieYear(self, serieName):
         pattern = '\([0-9]{4}\)'
