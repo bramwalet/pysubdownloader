@@ -6,7 +6,8 @@ Created on 24 apr 2010
 from sites.components.search.api.bierdopje import BierdopjeAPI
 import logging
 from xml.etree.ElementTree import dump
-from Subtitle import Subtitle
+from classes import Subtitle
+
 
 class BierdopjeWrapper(object):
     '''
