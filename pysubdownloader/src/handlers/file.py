@@ -39,21 +39,19 @@ class FileHandler(object):
         
         return srtFilesInZip
 
-
-    def writeZipFile(self, episode, archive):
-        zipFile = episode.generateZipFilename()
-        self.log.debug("Zip filename: " + zipFile)
-        zip = open(zipFile, 'w')
-        zip.write(archive)
-        zip.close()
-
-
-    def writeSrtFile(self, episode, fileContent):
-        srtfile = episode.generateSrtFilename()
-        self.log.debug("SRT filename: " + srtfile)
-        srt = open(srtfile, 'w')
+    def writeFile(self, fileContent, fileName):
+        self.log.debug("Filename: " + fileName)
+        srt = open(fileName, 'w')
         srt.write(fileContent)
         srt.close()
+        
+    def writeZipFile(self, episode, archive):
+        fileName = episode.generateZipFilename()
+        self.writeFile(archive, fileName)
+
+    def writeSrtFile(self, episode, fileContent):
+        fileName = episode.generateSrtFilename()
+        self.writeFile(fileContent, fileName)
 
     def extractZipFile(self, episode, archive):
         filesInZip = archive.namelist()

@@ -26,6 +26,11 @@ from springpython.context import ApplicationContext
 import logging
 
 
+    
+def main():
+    (path, language, logfilepath, debug) = parseOptions()
+    setupLogging(debug,logfilepath)
+    startSubtitleDownloader(path, language)
 
 def parseOptions():
     parser = OptionParser()
@@ -41,12 +46,7 @@ def parseOptions():
         path = options.folder 
 
     return (path, options.language, options.logfile, options.debug)
-
-
-
-
-    
-    
+ 
 def startSubtitleDownloader(path, language):
 #    container = ApplicationContext(XMLConfig("app-context.xml"))
     container = ApplicationContext(YamlConfig("app-context.yml"))
@@ -59,15 +59,6 @@ def startSubtitleDownloader(path, language):
         for site in sites.__iter__():
             currentsite = container.get_object(site + "site")
             currentsite.run(episodes, language)
-
-    
-    
-
-
-def main():
-    (path, language, logfilepath, debug) = parseOptions()
-    setupLogging(debug,logfilepath)
-    startSubtitleDownloader(path, language)
     
 def setupLogging(debug, logfilepath):
     if debug:
@@ -100,8 +91,5 @@ def setupLogging(debug, logfilepath):
        
     return log
 
-        
 if __name__ == '__main__':
-    main()  
-    
-        
+    main()
