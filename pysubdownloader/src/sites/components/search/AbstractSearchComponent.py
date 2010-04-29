@@ -27,6 +27,5 @@ class AbstractSearchComponent(AbstractComponent):
     classdocs
     '''
         
-    def search(self,episodes,language): abstract
-    def checkConfig(self,config): abstract
- 
+    def search(self,episodes,language): pass
+

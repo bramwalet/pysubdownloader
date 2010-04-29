@@ -1,0 +1,108 @@
+objects:
+    - object: enabledsites
+      list:
+        - podnapisi
+        - tvsubtitles
+        - bierdopje
+
+    - object: maxdays
+      int: 5
+
+    - object: inspector
+      class: lib.inspect.Inspector
+      scope: singleton
+      properties:
+        filenameParser: {ref: filenameParser}
+
+    - object: urlHandler
+      class: handlers.url.UrlHandler
+      scope: singleton
+
+    - object: fileHandler
+      class: handlers.file.FileHandler
+      scope: singleton
+
+    - object: filenameParser
+      class: parsers.file.FilenameParser
+      scope: singleton  
+
+    - object: rssFeedParser
+      class: parsers.rss.RssFeedParser
+      scope: singleton 
+      properties: 
+        filenameParser: {ref: filenameParser}
+
+    - object: htmlDownloader
+      class: sites.components.download.http.HttpDownloadComponent
+      scope: singleton
+      properties: 
+        urlHandler: {ref: urlHandler}
+        fileHandler: {ref: fileHandler}
+
+    - object: bierdopjeApi
+      class: sites.components.search.api.bierdopje.BierdopjeAPI
+      scope: singleton
+      properties:
+        urlHandler: {ref: urlHandler}
+      constructor-args:
+        apiurl: http://api.bierdopje.com/
+        # Place your own API key:
+        apikey: 
+
+    - object: bierdopjeWrapper
+      class: sites.components.search.wrapper.bierdopje.BierdopjeWrapper
+      scope: singleton
+      properties:
+        api: {ref: bierdopjeApi}
+
+    - object: bierdopjesite
+      class: sites.site.AbstractSubtitleSite
+      scope: singleton
+      constructor-args:
+        siteName: Bierdopje
+      properties: 
+        downloadComponent: {ref: htmlDownloader}
+        searchComponent: 
+            object: apiSearchBierdopje
+            class: sites.components.search.apisearch.ApiSearchComponent
+            properties: 
+              wrapper: {ref: bierdopjeWrapper}
+
+    - object: podnapisisite
+      class: sites.site.AbstractSubtitleSite
+      scope: singleton
+      constructor-args:
+        siteName: Podnapisi
+      properties: 
+        downloadComponent: {ref: htmlDownloader}
+        searchComponent: 
+            object: xmlSearchPodnapisi
+            class: sites.components.search.xml.XmlSearchComponent
+            properties: 
+              urlHandler: {ref: urlHandler}
+              searchUrl: http://simple.podnapisi.net/ppodnapisi/search?
+              languageKeys: 
+                  en: 2
+                  es: 28
+                  fr: 8
+                  nl: 23
+                  de: 5
+
+    - object: tvsubtitlessite
+      class: sites.site.AbstractSubtitleSite
+      scope: singleton
+      constructor-args:
+        siteName: TvSubtitles
+      properties: 
+        downloadComponent: {ref: htmlDownloader}
+        searchComponent: 
+            object: xmlSearchPodnapisi
+            class: sites.components.search.rss.RssSearchComponent
+            properties: 
+              filenameParser: {ref: filenameParser}
+              rssFeedParser: {ref: rssFeedParser}
+              rssFeedUrlByLanguage: 
+                  en: http://www.tvsubtitles.net/rssen.xml
+                  nl: http://www.tvsubtitles.net/rssnl.xml
+                  es: http://www.tvsubtitles.net/rsses.xml
+                  de: http://www.tvsubtitles.net/rssde.xml
