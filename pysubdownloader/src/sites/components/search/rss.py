@@ -20,8 +20,7 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: Bram Walet
 '''
-from sites.components.search.AbstractSearchComponent import \
-    AbstractSearchComponent
+from sites.components.search import AbstractSearchComponent
 import logging
 
 class RssSearchComponent(AbstractSearchComponent):

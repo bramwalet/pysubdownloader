@@ -4,8 +4,8 @@ Created on 30 mei 2009
 @author: Bram Walet
 '''
 
-from classes.Subtitle import Subtitle
-from sites.components.search.AbstractSearchComponent import \
+from classes import Subtitle
+from sites.components.search import \
     AbstractSearchComponent
 from lxml.etree import fromstring
 import urllib

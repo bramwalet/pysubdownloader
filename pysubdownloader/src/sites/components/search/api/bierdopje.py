@@ -7,6 +7,7 @@ import urllib
 import logging
 from xml.etree import ElementTree
 from classes.exceptions import ConfigException
+from classes import Subtitle
 
 
 class BierdopjeAPI(object):
@@ -89,3 +90,32 @@ class BierdopjeAPI(object):
             textelements.append(element.text)
         return textelements
 
+
+class BierdopjeWrapper(object):
+    '''
+    classdocs
+    '''
+
+
+    def __init__(self):
+        '''
+        Constructor
+        '''
+        self.log = logging.getLogger("PySubDownloader.BierdopjeWrapper")
+
+        
+    def search(self,episode,language): 
+        season = episode.getSeason()
+        name = episode.getSerie()
+        responseShows = self.api.GetShowByName(name)
+        showids = self.api.gettextelements(responseShows,"response/showid")
+        if len(showids) == 1:
+            showid = showids[0]
+            responseSubs = self.api.GetAllSubsFor(showid, season, episode.getEpisode(), language, False)
+            downloadlinks = self.api.gettextelements(responseSubs,"response/results/result/downloadlink")
+            if len(downloadlinks)>0:
+                sub = Subtitle(name, season, episode.getEpisode() , downloadlinks[0], None)
+                return sub,episode # @TODO 
+        else:
+            self.log.warn("unable to determine show")
+       
