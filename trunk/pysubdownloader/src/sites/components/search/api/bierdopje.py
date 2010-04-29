@@ -6,6 +6,7 @@ Created on 24 apr 2010
 import urllib
 import logging
 from xml.etree import ElementTree
+from classes.exceptions import ConfigException
 
 
 class BierdopjeAPI(object):
@@ -23,6 +24,9 @@ class BierdopjeAPI(object):
         self.apikey = apikey
         
     def __call_api__(self, command, params=None):
+        if(self.apikey == "None"):
+            raise ConfigException("API Key is unconfigured")
+        
         self.log.debug("Calling API with command: " + command + " and parameters: " + str(params))
         url = self.apiurl + self.apikey + "/" + command 
         if params is not None:

@@ -20,24 +20,10 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: Bram Walet
 '''
-from classes import ConfigException
 
 class AbstractComponent(object):
     '''
     classdocs
     '''
 
-    def checkConfigByKeys(self,config,requiredKeys):
-        if config is None:
-            raise ConfigException("This site is unconfigured. Please implement method setUp() and fill these keys as dictionary: " + str(requiredKeys))
-        for requiredKey in requiredKeys:
-            try:
-                config[requiredKey]
-            except (KeyError, ), e:
-                raise ConfigException(requiredKey + " is not configured")
-
-    def setConfig(self,config):
-        self.config = config
-        
-    def setLogger(self,logger):
-        self.log = logger
+    
