@@ -17,6 +17,7 @@ This script is designed to work on every OS. I have tested it so far on Windows,
   * [http://codespeak.net/lxml/installation.html lxml] is required to parse HTML documents
    Install setuptools and run {{{easy_install lxml}}}.  
   * [http://www.feedparser.org/ Universal Feed Parser] is required to parse RSS feeds.
+  * [http://www.springsource.org/extensions/se-springpython-py Spring Python] is required as the application uses Spring Python internally to create objects.
 
 = Installation =
 
@@ -33,6 +34,7 @@ Install these packages in the following order:
  # py25-lxml: Bindings for libxml2 and libxslt with python2.5. If you don't install this package, lxml will not build.
  # easy_install lxml: This will install lxml, required for processing HTML pages.
  # py25-feedparser: This will install the universal feed parser for processing RSS feeds.
+ # download Spring python from the link above or install using easy_install springpython
 
 When you're done, you're ready to use pysubdownloader.
 
@@ -43,5 +45,6 @@ Install the binary versions in this order:
  # [http://pypi.python.org/packages/2.5/s/setuptools/setuptools-0.6c9.win32-py2.5.exe#md5=602d06054ec1165e995ae54ac30884d7 setuptools],
  # lxml (run {{{easy_install lxml}}} from the Scripts folder in your Python installation dir), 
  # use {{{easy_install feedparser}}} or download source of Universal Feed Parser and run {{{setup.py install}}}
+ # download Spring python from the link above or install using easy_install springpython
 
 When you're done, you're ready to use pysubdownloader.
