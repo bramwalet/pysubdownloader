@@ -30,11 +30,8 @@ class RssFeedParser(object):
     classdocs
     '''
 
-    def __init__(self, filenameParser):
-        self.filenameParser = filenameParser
-
-        
-    def parse(self,url, baseUrl):
+      
+    def parse(self,url):
         items = []
         feed = feedparser.parse(url)
         for feeditem in feed["items"]:

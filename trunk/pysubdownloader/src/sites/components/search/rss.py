@@ -22,30 +22,21 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 '''
 from sites.components.search.AbstractSearchComponent import \
     AbstractSearchComponent
-from lib.LoggerFactory import LoggerFactory
+import logging
 
 class RssSearchComponent(AbstractSearchComponent):
     '''
     classdocs
     '''
 
-    def __init__(self,filenameParser, rssFeedParser):
-        self.fparser = filenameParser
-        self.rssparser = rssFeedParser
-        self.log = LoggerFactory.getLogger("RssSearchComponent")
-
-        
-    def checkConfig(self, config):
-        requiredKeys = ('siteName', 'baseUrl', 'rssFeed')
-        super(AbstractSearchComponent, self).checkConfig(config, requiredKeys)
-    
+    def __init__(self):
+        self.log = logging.getLogger("PySubDownloader." + self.__class__.__name__)
+  
     def search(self, episodes, language):
-        self.language = language
         downloadList = []
         self.log.info("Search for new episodes on RSS feed.")
-        rssFeedUrl = self.getRssFeedUrl(self.language)
-        
-        availableSubs = self.rssparser.parse(rssFeedUrl, self.config["baseUrl"])
+        rssFeedUrl = self.getRssFeedUrl(language)
+        availableSubs = self.rssFeedParser.parse(rssFeedUrl)
         for aSub in availableSubs: 
             for episode in episodes:
                 if episode.appropriateSub(aSub):
@@ -56,8 +47,8 @@ class RssSearchComponent(AbstractSearchComponent):
         self.log.info("Found " + str(len(downloadList)) + " sub(s) to download")       
         return downloadList
                     
-    def getRssFeedUrl(self, language):
-        rssFeedUrl = self.config["rssFeed"]
+    def getRssFeedUrl(self, language):     
+        rssFeedUrl = self.rssFeedUrlByLanguage[language]
         return rssFeedUrl       
      
 

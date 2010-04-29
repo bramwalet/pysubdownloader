@@ -25,6 +25,4 @@ class AbstractDownloadComponent(AbstractComponent):
     '''
     classdocs
     '''
-    def downloadSubtitle(self,sub,episode): abstract
-    def setUpHandlers(self): abstract
-    def checkConfig(self,config): abstract
+    def downloadSubtitle(self,sub,episode): pass

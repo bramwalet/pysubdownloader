@@ -20,22 +20,33 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 @author: Bram Walet
 '''
 import urllib2
+import logging
 
-from lib.LoggerFactory import LoggerFactory
       
 class UrlHandler(object):
     
     def __init__(self):
-        self.log = LoggerFactory.getLogger("UrlHandler")
-        
+        self.log = logging.getLogger("PySubDownloader." + self.__class__.__name__)
+        self.installUrlHandler()
+          
     def executeRequest(self, downloadurl):
         self.log.debug("Execute Request URL: " + downloadurl)
         request = urllib2.Request(downloadurl)
         response = urllib2.urlopen(request)
         responseInfo = response.info()
         return response, responseInfo.subtype
+
+    def determineLoggingLevel(self):
+        level = self.log.getEffectiveLevel()
+        if level == logging.DEBUG:
+            debuglevel = True
+        else:
+            debuglevel = False
+        return debuglevel
+
     def installUrlHandler(self):
-        http_handler = urllib2.HTTPHandler(debuglevel=True)
+        debuglevel = self.determineLoggingLevel()
+        http_handler = urllib2.HTTPHandler(debuglevel)
         opener = urllib2.build_opener(http_handler)
         urllib2.install_opener(opener)
 

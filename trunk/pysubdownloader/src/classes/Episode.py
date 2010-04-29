@@ -30,13 +30,13 @@ class Episode(object):
         '''
         Constructor
         '''
-        self.serie = serie
-        self.year = year
-        self.season = int(season)
+        self.__serie = serie
+        self.__year = year
+        self.__season = int(season)
         episodes = episode.split('-')
-        self.episode = int(episodes[0])
-        self.path = path
-        self.fileName = fileName
+        self.__episode = int(episodes[0])
+        self.__path = path
+        self.__fileName = fileName
 
     def getSerie(self):
         return self.__serie
@@ -112,15 +112,15 @@ class Episode(object):
 
 
     def printEpisode(self):
-        return "serie: " + self.serie + " Season: " + str(self.season) + " Episode: " + str(self.episode)
+        return "serie: " + self.getSerie() + " Season: " + str(self.getSeason()) + " Episode: " + str(self.getEpisode())
         
     def appropriateSub(self, sub):
   
-        if self.serie != sub.getSerie():
+        if self.__serie != sub.getSerie():
             return False
-        if self.season != int(sub.getSeason()):
+        if self.__season != int(sub.getSeason()):
             return False
-        if self.episode != int(sub.getEpisode()):
+        if self.__episode != int(sub.getEpisode()):
             return False   
         if sub.isDoubleEpisode():
             #self.log.error("Double episodes not supported")
@@ -130,8 +130,8 @@ class Episode(object):
     
 
     def generateFilename(self, ext):
-        fileBaseName, fileExt = os.path.splitext(self.fileName)
-        filename = os.path.join(self.path, fileBaseName + ext)
+        fileBaseName, fileExt = os.path.splitext(self.getFileName())
+        filename = os.path.join(self.getPath(), fileBaseName + ext)
         return filename
 
     def generateSrtFilename(self):

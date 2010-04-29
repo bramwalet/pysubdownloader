@@ -23,33 +23,44 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 # local imports
 from sites.components.download.AbstractDownloadComponent import AbstractDownloadComponent
 from lxml.html import fromstring
-from lib.LoggerFactory import LoggerFactory
+import logging
 
 
 class HttpDownloadComponent(AbstractDownloadComponent):
     '''
     classdocs
     '''
-    def __init__(self,urlHandler,fileHandler):
-        self.uh = urlHandler
-        self.fh = fileHandler
-        self.log = LoggerFactory.getLogger("HttpDownloadComponent")
+    def __init__(self):
+        self.log = logging.getLogger("PySubDownloader." + self.__class__.__name__)
+
+    def downloadSubtitle(self, sub, episode):
+        downloadurl = sub.getLink()
+        self.downloadSubtitleInternal(sub, episode, downloadurl)
+   
+    def downloadSubtitleInternal(self, sub, episode, downloadurl):
+        self.log.debug("Trying to download subtitle id: " + sub.getLink() + " for episode: " + episode.printEpisode())
+        (content, subtype) = self.getContent(downloadurl)
+        if (subtype == "zip") & (self.fileHandler.isZipFile(content)):
+            self.handleZipFile(episode, downloadurl, content)
+        elif (subtype == "html"):
+            self.handleHtmlPage(sub, episode, downloadurl, content)
+        elif (subtype == "octet-stream"):
+            self.handleSrtFile(episode, content)
+        else:
+            self.log.error("Unknown file type: " + subtype)
 
     def getContent(self, downloadurl):
-        (filein,subtype) = self.uh.executeRequest(downloadurl)
+        (filein, subtype) = self.urlHandler.executeRequest(downloadurl)
         content = filein.read()
         return content, subtype
 
-
-
     def handleZipFile(self, episode, downloadurl, content):
         self.log.debug("Content is zip file")
-        archive = self.fh.openZipFile(content)
+        archive = self.fileHandler.openZipFile(content)
         if archive is None:
             self.log.warn("Download failed for " + downloadurl)
-        elif self.fh.extractZipFile(episode, archive):
+        elif self.fileHandler.extractZipFile(episode, archive):
             self.log.info("Extracted subtitle for: " + episode.printEpisode())
-
 
     def handleHtmlPage(self, sub, episode, downloadurl, content):
         self.log.debug("Content is HTML page, search for download link")
@@ -61,22 +72,7 @@ class HttpDownloadComponent(AbstractDownloadComponent):
                 self.log.debug("Found link with ID and DOWNLOAD: " + link)
                 self.downloadSubtitleInternal(sub, episode, link)
 
-    def downloadSubtitleInternal(self, sub, episode, downloadurl):
-        self.log.debug("Trying to download subtitle id: " + sub.getId() + " for episode: " + episode.printEpisode())
-        (content,subtype) = self.getContent(downloadurl)
-        if (subtype == "zip") & (self.fh.isZipFile(content)):
-            self.handleZipFile(episode, downloadurl, content)
-        elif (subtype == "html"):
-            self.handleHtmlPage(sub, episode, downloadurl, content)
-        else:
-            self.log.error("Unknown file type: " + subtype)
+    def handleSrtFile(self, episode, content):
+        self.log.debug("Content is srt, download and extract.")
+        self.fileHandler.writeSrtFile(episode, content)
 
-    def downloadSubtitle(self,sub,episode):
-        downloadurl = sub.getLink()
-        self.uh.installUrlHandler()
-        self.downloadSubtitleInternal(sub, episode, downloadurl)
-                    
-            
-    def checkConfig(self,config):
-        requiredKeys = ('siteName')
-        super(self).checkConfig(config,requiredKeys)

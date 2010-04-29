@@ -21,20 +21,14 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 
 '''
 from optparse import OptionParser
-from lib.Inspector import Inspector
-#from sites.TvSubtitleSite import TvSubtitleSite
-from sites.PodnapisiSite import PodnapisiSite
-from sites.TvSubtitleSite import TvSubtitleSite
-from lib.LoggerFactory import LoggerFactory
-from sites.BierdopjeSite import BierdopjeSite
 from springpython.context import ApplicationContext
 from springpython.config import XMLConfig
+from springpython.config import YamlConfig
 import logging
-#from sites.TvSubsSite import TvSubsSite
 
-    
+
+
 def parseOptions():
-    
     parser = OptionParser()
     parser.add_option("-f", dest="folder", help="scan this folder and subfolders", metavar="FOLDER")
     parser.add_option("-d", "--debug", action="store_true", dest="debug", default=False)
@@ -42,57 +36,69 @@ def parseOptions():
     parser.add_option("-l", dest="language", help="language to search subtitles for", type="choice", choices=("en", "nl"), default="en")
     (options, args) = parser.parse_args()
     if options.folder is None:
-        #usage()
         parser.error("-f is a required option")
         
     else: 
         path = options.folder 
-#    if options.language is None:
-#        parser.error("-l is a required option")
-#    else: 
-#        language = options.language   
+
     return (path, options.language, options.logfile, options.debug)
 
 
-def startSubtitleDownloader(path, language, logfile, debug, logger):
-    logger = logging.getLogger("springpython")
-    loggingLevel = logging.DEBUG
-    logger.setLevel(loggingLevel)
-    ch = logging.StreamHandler()
-    ch.setLevel(loggingLevel)
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    ch.setFormatter(formatter)
-    logger.addHandler(ch)
 
-    container = ApplicationContext(XMLConfig("app-context.xml"))
+
+    
+    
+def startSubtitleDownloader(path, language, debug):
+    setupLogging(debug)
+    
+  
+
+
+#    container = ApplicationContext(XMLConfig("app-context.xml"))
+    container = ApplicationContext(YamlConfig("app-context.yml"))
     inspector = container.get_object("inspector")
+    sites = container.get_object("enabledsites")
+    maxdays = container.get_object("maxdays")
     
-    episodes = inspector.scan(path)
-    
-    tvsub = container.get_object("tvsubtitlesite")
-    tvsub.run(episodes, language)
-    
-    podnapisi = container.get_object("podnapisisite")
-    podnapisi.run(episodes, language)
+    episodes = inspector.scan(path, maxdays)
+    if len(episodes) > 0:
+        for site in sites.__iter__():
+            currentsite = container.get_object(site + "site")
+            currentsite.run(episodes, language)
 
     
-#    try:
-#        logger.info("Starting Bierdopje")
-#        bierdopje = BierdopjeSite(language,logfile,debug)
-#        bierdopje.run(episodes,language)
-#    except (RuntimeError, ), e:
-#        raise
     
-   
 
 
 def main():
     (path, language, logfilepath, debug) = parseOptions()
-    logger = setupLogging()
-    startSubtitleDownloader(path, language, logfilepath, debug, logger)
+    startSubtitleDownloader(path, language, debug)
     
-def setupLogging():
-    return LoggerFactory.getLogger("PySubDownloader")
+def setupLogging(debug):
+    if debug:
+        loglevel = logging.DEBUG
+    else:
+        loglevel = logging.INFO
+        
+    ''' Application logging
+    '''
+    log = logging.getLogger("PySubDownloader")
+    log.setLevel(loglevel)
+    consoleHandler = logging.StreamHandler()
+    consoleHandler.setLevel(loglevel)
+    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+    consoleHandler.setFormatter(formatter)
+    log.addHandler(consoleHandler)
+    
+    ''' Spring Python logging
+    '''
+    springlogger = logging.getLogger("springpython")
+    loggingLevel = logging.DEBUG
+    springlogger.setLevel(loggingLevel)
+    springlogger.addHandler(consoleHandler)
+       
+    return log
+
         
 if __name__ == '__main__':
     main()  

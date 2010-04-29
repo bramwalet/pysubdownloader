@@ -21,14 +21,14 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
 import zipfile, StringIO
-from lib.LoggerFactory import LoggerFactory
 import os
+import logging
 
 class FileHandler(object):
     
     def __init__(self):
-        self.log = LoggerFactory.getLogger("FileHandler")
-        
+        self.log = logging.getLogger("PySubDownloader." + self.__class__.__name__)
+         
 
     def determineSrtFilesInZip(self, filesInZip):
         srtFilesInZip = []
@@ -48,11 +48,11 @@ class FileHandler(object):
         zip.close()
 
 
-    def writeSrtFile(self, episode, archive, file):
+    def writeSrtFile(self, episode, fileContent):
         srtfile = episode.generateSrtFilename()
         self.log.debug("SRT filename: " + srtfile)
         srt = open(srtfile, 'w')
-        srt.write(archive.read(file))
+        srt.write(fileContent)
         srt.close()
 
     def extractZipFile(self, episode, archive):
@@ -63,7 +63,8 @@ class FileHandler(object):
         
         if len(srtFilesInZip) == 1:
             for file in srtFilesInZip:
-                self.writeSrtFile(episode, archive, file)
+                srtFile = archive.read(file)
+                self.writeSrtFile(episode, srtFile)
                 return True
         if len(srtFilesInZip) < 1:
             self.log.warn("Found more than one file in zip. Extract aborted. Placing zip file instead")
