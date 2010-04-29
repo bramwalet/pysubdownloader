@@ -21,9 +21,8 @@ along with PySubDownloader.  If not, see <http://www.gnu.org/licenses/>.
 
 '''
 from optparse import OptionParser
-from springpython.context import ApplicationContext
-from springpython.config import XMLConfig
 from springpython.config import YamlConfig
+from springpython.context import ApplicationContext
 import logging
 
 
@@ -48,12 +47,7 @@ def parseOptions():
 
     
     
-def startSubtitleDownloader(path, language, debug):
-    setupLogging(debug)
-    
-  
-
-
+def startSubtitleDownloader(path, language):
 #    container = ApplicationContext(XMLConfig("app-context.xml"))
     container = ApplicationContext(YamlConfig("app-context.yml"))
     inspector = container.get_object("inspector")
@@ -72,9 +66,10 @@ def startSubtitleDownloader(path, language, debug):
 
 def main():
     (path, language, logfilepath, debug) = parseOptions()
-    startSubtitleDownloader(path, language, debug)
+    setupLogging(debug,logfilepath)
+    startSubtitleDownloader(path, language)
     
-def setupLogging(debug):
+def setupLogging(debug, logfilepath):
     if debug:
         loglevel = logging.DEBUG
     else:
@@ -89,6 +84,12 @@ def setupLogging(debug):
     formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(name)s - %(message)s")
     consoleHandler.setFormatter(formatter)
     log.addHandler(consoleHandler)
+    
+    if(logfilepath is not None):
+        handler = logging.handlers.RotatingFileHandler(
+                  logfilepath, maxBytes=20, backupCount=5)
+        log.addHandler(handler)
+
     
     ''' Spring Python logging
     '''
