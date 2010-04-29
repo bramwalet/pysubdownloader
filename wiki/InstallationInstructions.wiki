@@ -48,3 +48,33 @@ Install the binary versions in this order:
  # download Spring python from the link above or install using easy_install springpython
 
 When you're done, you're ready to use pysubdownloader.
+
+= Configuration =
+
+In order to use the site Bierdopje, you have to obtain an API key. 
+When obtained, place the API key in the app-config.yml file.
+
+{{{
+    - object: bierdopjeApi
+      class: sites.components.search.api.bierdopje.BierdopjeAPI
+      scope: singleton
+      properties:
+        urlHandler: {ref: urlHandler}
+      constructor-args:
+        apiurl: http://api.bierdopje.com/
+        # Place your own API key:
+        apikey: <INSERT KEY>
+}}}
+
+To enable or disable certain sites, modify app-config.yml:
+
+{{{
+    - object: enabledsites
+      list:
+        - podnapisi
+        - tvsubtitles
+        - bierdopje
+}}}
+
+The order of these sites can be changed, this will be reflected in the run of the sites.
+When a site is commented out (using #) it will not be searched.
