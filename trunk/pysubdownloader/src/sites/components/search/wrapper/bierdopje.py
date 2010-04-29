@@ -30,7 +30,6 @@ class BierdopjeWrapper(object):
         if len(showids) == 1:
             showid = showids[0]
             responseSubs = self.api.GetAllSubsFor(showid, season, episode.getEpisode(), language, False)
-            dump(responseSubs)
             downloadlinks = self.api.gettextelements(responseSubs,"response/results/result/downloadlink")
             if len(downloadlinks)>0:
                 sub = Subtitle(name, season, episode.getEpisode() , downloadlinks[0], None)
