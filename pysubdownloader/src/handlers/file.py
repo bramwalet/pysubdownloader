@@ -45,15 +45,15 @@ class FileHandler(object):
         srt.write(fileContent)
         srt.close()
         
-    def writeZipFile(self, episode, archive):
+    def writeZipFile(self, episode, content):
         fileName = episode.generateZipFilename()
-        self.writeFile(archive, fileName)
+        self.writeFile(content, fileName)
 
     def writeSrtFile(self, episode, fileContent):
         fileName = episode.generateSrtFilename()
         self.writeFile(fileContent, fileName)
 
-    def extractZipFile(self, episode, archive):
+    def extractZipFile(self, episode, archive,content):
         filesInZip = archive.namelist()
         self.log.debug("Files in zip: " + str(filesInZip))
         srtFilesInZip = self.determineSrtFilesInZip(filesInZip)
@@ -66,7 +66,7 @@ class FileHandler(object):
                 return True
         if len(srtFilesInZip) < 1:
             self.log.warn("Found more than one file in zip. Extract aborted. Placing zip file instead")
-            self.writeZipFile(episode, archive)
+            self.writeZipFile(episode, content)
             return True
         else:
             self.log.warn("Expected at least 1 SRT file in zip, none found.")
