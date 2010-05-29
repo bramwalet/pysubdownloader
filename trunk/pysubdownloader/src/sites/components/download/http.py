@@ -59,7 +59,7 @@ class HttpDownloadComponent(AbstractDownloadComponent):
         archive = self.fileHandler.openZipFile(content)
         if archive is None:
             self.log.warn("Download failed for " + downloadurl)
-        elif self.fileHandler.extractZipFile(episode, archive):
+        elif self.fileHandler.extractZipFile(episode, archive, content):
             self.log.info("Extracted subtitle for: " + episode.printEpisode())
 
     def handleHtmlPage(self, sub, episode, downloadurl, content):
