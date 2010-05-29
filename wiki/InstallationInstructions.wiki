@@ -78,3 +78,12 @@ To enable or disable certain sites, modify app-config.yml:
 
 The order of these sites can be changed, this will be reflected in the run of the sites.
 When a site is commented out (using #) it will not be searched.
+
+The script will search only for newly added files, based on the last modification date. A specified number of days must be between the last modification date and the system time. This parameter can be edited in the configuration files:
+
+{{{
+    - object: maxdays
+      int: 10
+}}}
+
+The default is 10, so when a subtitle isn't found for 10 days after the last modification date, the episode will be skipped.
